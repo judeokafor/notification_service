@@ -1,0 +1,52 @@
+steps:
+# creates '.env' file based on substitution variables
+- name: docker
+  entrypoint: bash
+  args: ['-c', 'printenv > .env']
+  env:
+    - '_APP_ENV=$_APP_ENV'
+    - '_IMAGE=$_IMAGE'
+    - '_PROJECT_ID=$_PROJECT_ID'
+    - '_REGION=$_REGION'
+
+# Pulling Service NPM Config
+- name: node
+  entrypoint: npm
+  args: ['run', 'artifactregistry-login', '.npmrc']
+
+# Build the container image
+- name: docker
+  args: ['build', '-t', 'gcr.io/$_PROJECT_ID/$_IMAGE', '.']
+
+# Push the image to Container Registry
+- name: docker
+  args: ['push', 'gcr.io/$_PROJECT_ID/$_IMAGE']
+
+# Lint the code
+- name: docker
+  entrypoint: bash
+  args: ['-c', 'docker run gcr.io/$_PROJECT_ID/$_IMAGE npm run lint']
+
+Run the tests
+- name: docker
+  entrypoint: bash
+  args: ['-c', 'docker run gcr.io/$_PROJECT_ID/$_IMAGE npm run test']
+
+# Deploy image to Cloud Run
+- name: 'gcloud'
+  args:
+  - 'run'
+  - 'deploy'
+  - '$_SERVICE_NAME'
+  - '--image'
+  - 'gcr.io/$_PROJECT_ID/$_IMAGE'
+  - '--region'
+  - '$_REGION'
+  - '--platform'
+  - 'managed'
+  - '--allow-unauthenticated'
+  - '--service-account'
+  - '$_SERVICE_ACCOUNT_EMAIL'
+
+images:
+- gcr.io/$_PROJECT_ID/$_IMAGE

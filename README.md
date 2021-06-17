@@ -1,29 +1,81 @@
-# README #
+# {ADD SERVICE NAME HERE} #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+**{Add short overview description of service here}**
 
-### What is this repository for? ###
+## Prerequiste Before Usage
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+Each one of these steps must be followed for the service to securely start.
 
-### How do I get set up? ###
+1. Go to the `package.json` and replace the following:
+    - EXAMPLE_SERVICE => service name (ex: risk-assessment)
+    - EXAMPLE_DESCRIPTION => service description (ex: Verifies customer KYC information)
+2. Create a [Service Account](https://cloud.google.com/iam/docs/service-accounts) specifically for this service.
+3. Give the service account the following permissions:
+    - Artifact Registry Reader
+    - Cloud KMS CryptoKey Decrypter
+    - Firebase Admin
+    - Pub/Sub Publisher
+    - Secret Manager Secret Accessor
+4. Generate keys for the Service Account in JSON format
+5. Create a `service-account.json` under the `/config` directory
+6. Copy and Paste the keys JSON in the `service-account.json` file
+7. From your terminal run the following command:
+```
+export GOOGLE_APPLICATION_CREDENTIALS={path to service-account.json}
+```
+8. Set up the NPM configuration file by running the following command:
+```
+npm run artifactregistry-login
+```
+9. [Create secrets](https://cloud.google.com/secret-manager) for the service. **Make sure the secret name is the same as the service name**
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
 
-### Contribution guidelines ###
+## Usage
+* Installing dependencies
+```
+npm i
+```
 
-* Writing tests
-* Code review
-* Other guidelines
+* Running tests
+To run our unit tests you can run:
 
-### Who do I talk to? ###
+```
+npm run test
+```
 
-* Repo owner or admin
-* Other community or team contact
+* Running lint
+To lint the code run:
+
+```
+npm run lint
+```
+
+* Start Locally
+```
+npm run dev
+```
+
+## Example
+```
+import NodeService from '@payhippo/node-service-template';
+import * as dotenv from 'dotenv';
+
+import * as pack from '../package.json';
+
+try {
+	const apps = NodeService({
+		description: pack.description,
+		config: {
+			env: 'DEVELOPMENT',
+			secretVersion: 1,
+		},
+		name: pack.name,
+		routers: { api },
+		version: pack.version,
+	});
+
+	apps.start();
+} catch (error) {
+	console.error(`Error occured: ${error.message}`);
+}
+```
