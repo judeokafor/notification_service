@@ -1,6 +1,6 @@
 steps:
 # creates '.env' file based on substitution variables
-- name: docker
+- name: gcr.io/cloud-builders/docker
   entrypoint: bash
   args: ['-c', 'printenv > .env']
   env:
@@ -15,25 +15,25 @@ steps:
   args: ['run', 'artifactregistry-login', '.npmrc']
 
 # Build the container image
-- name: docker
+- name: gcr.io/cloud-builders/docker
   args: ['build', '-t', 'gcr.io/$_PROJECT_ID/$_IMAGE', '.']
 
 # Push the image to Container Registry
-- name: docker
+- name: gcr.io/cloud-builders/docker
   args: ['push', 'gcr.io/$_PROJECT_ID/$_IMAGE']
 
 # Lint the code
-- name: docker
+- name: gcr.io/cloud-builders/docker
   entrypoint: bash
   args: ['-c', 'docker run gcr.io/$_PROJECT_ID/$_IMAGE npm run lint']
 
 #Run the tests
-- name: docker
+- name: gcr.io/cloud-builders/docker
   entrypoint: bash
   args: ['-c', 'docker run gcr.io/$_PROJECT_ID/$_IMAGE npm run test']
 
 # Deploy image to Cloud Run
-- name: 'gcloud'
+- name: 'gcr.io/cloud-builders/gcloud'
   args:
   - 'run'
   - 'deploy'
