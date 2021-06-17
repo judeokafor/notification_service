@@ -1,4 +1,4 @@
-import NodeService from '@payhippo/node-service-template';
+import NodeService from '@payhippo/node-service-base';
 import * as dotenv from 'dotenv';
 
 import { exampleMiddleware } from './middlewares';

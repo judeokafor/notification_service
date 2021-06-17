@@ -79,3 +79,6 @@ try {
 	console.error(`Error occured: ${error.message}`);
 }
 ```
+
+## Importpant Important
+- You will need to reauthenticate with `npm run artifactregistry-login` whenever you want to pull the latest version of `@payhippo/node-service-base`.
