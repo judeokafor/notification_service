@@ -25,7 +25,7 @@ export GOOGLE_APPLICATION_CREDENTIALS={path to service-account.json}
 ```
 8. Set up the NPM configuration file by running the following command:
 ```
-npm run artifactregistry-login
+npm run artifactregistry-login .npmrc
 ```
 9. [Create secrets](https://cloud.google.com/secret-manager) for the service. **Make sure the secret name is the same as the service name**
 
@@ -81,4 +81,4 @@ try {
 ```
 
 ## Importpant Important
-- You will need to reauthenticate with `npm run artifactregistry-login` whenever you want to pull the latest version of `@payhippo/node-service-base`.
+- You will need to reauthenticate with `npm run artifactregistry-login .npmrc` whenever you want to pull the latest version of `@payhippo/node-service-base`.
