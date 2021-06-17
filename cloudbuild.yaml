@@ -27,7 +27,7 @@ steps:
   entrypoint: bash
   args: ['-c', 'docker run gcr.io/$_PROJECT_ID/$_IMAGE npm run lint']
 
-Run the tests
+#Run the tests
 - name: docker
   entrypoint: bash
   args: ['-c', 'docker run gcr.io/$_PROJECT_ID/$_IMAGE npm run test']
