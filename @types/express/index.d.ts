@@ -10,7 +10,9 @@ type PublishMessagePayload = {
 
 type Logger = Console | any;
 
-type SecretsCopy = {
+/**
+ * Example Secrets Pattern
+ * {
 	credit_registry?: {
 		email: string;
 		password: string;
@@ -32,7 +34,9 @@ type SecretsCopy = {
 		vin_api_key: string;
 		user_id: string;
 	};
-};
+}
+ */
+type SecretsCopy = any;
 
 declare global {
 	namespace Express {

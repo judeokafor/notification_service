@@ -9,6 +9,7 @@ Each one of these steps must be followed for the service to securely start.
 1. Go to the `package.json` and replace the following:
     - EXAMPLE_SERVICE => service name (ex: risk-assessment)
     - EXAMPLE_DESCRIPTION => service description (ex: Verifies customer KYC information)
+    - Set the version to `0.0.1`
 2. Create a [Service Account](https://cloud.google.com/iam/docs/service-accounts) specifically for this service.
 3. Give the service account the following permissions:
     - Artifact Registry Reader
