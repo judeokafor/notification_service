@@ -40,7 +40,7 @@
     "webpack-node-externals": "3.0.0"
   },
   "dependencies": {
-    "@payhippo/node-service-base": "^1.0.0",
+    "@payhippo/node-service-base": "1.0.4",
     "dotenv": "8.2.0",
     "express": "4.17.1"
   }
