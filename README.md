@@ -68,7 +68,7 @@ try {
 		description: pack.description,
 		config: {
 			env: 'DEVELOPMENT',
-			secretVersion: 1,
+			secretVersion: '1',
 		},
 		name: pack.name,
 		routers: { api },
