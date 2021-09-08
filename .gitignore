@@ -98,3 +98,4 @@ cors.json
 /exec -l
 .DS_store
 /config/**
+package-lock.json
