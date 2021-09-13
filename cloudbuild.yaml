@@ -1,4 +1,13 @@
 steps:
+- name: node
+  entrypoint: npm
+  args: ['run', 'artifactregistry-login', '$_APP_ENV.npmrc']
+
+# Copy NPM Config Over to .npmrc File
+- name: gcr.io/cloud-builders/docker
+  entrypoint: bash
+  args: ['-c', 'cp $_APP_ENV.npmrc .npmrc']
+
 # creates '.env' file based on substitution variables
 - name: gcr.io/cloud-builders/docker
   entrypoint: bash
@@ -8,11 +17,9 @@ steps:
     - '_IMAGE=$_IMAGE'
     - '_PROJECT_ID=$_PROJECT_ID'
     - '_REGION=$_REGION'
-
-# Pulling Service NPM Config
-- name: node
-  entrypoint: npm
-  args: ['run', 'artifactregistry-login', '.npmrc']
+    - '_SECRET_VERSION_ID=$_SECRET_VERSION_ID'
+    - '_SERVICE_NAME=$_SERVICE_NAME'
+    - '_VERIFYME_BASE_URL=$_VERIFYME_BASE_URL'
 
 # Build the container image
 - name: gcr.io/cloud-builders/docker
@@ -27,10 +34,10 @@ steps:
   entrypoint: bash
   args: ['-c', 'docker run gcr.io/$_PROJECT_ID/$_IMAGE npm run lint']
 
-#Run the tests
-- name: gcr.io/cloud-builders/docker
-  entrypoint: bash
-  args: ['-c', 'docker run gcr.io/$_PROJECT_ID/$_IMAGE npm run test']
+# Run the tests
+# - name: gcr.io/cloud-builders/docker
+#   entrypoint: bash
+#   args: ['-c', 'docker run gcr.io/$_PROJECT_ID/$_IMAGE npm run test']
 
 # Deploy image to Cloud Run
 - name: 'gcr.io/cloud-builders/gcloud'
