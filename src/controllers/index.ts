@@ -1,1 +1,1 @@
-export { default as creditScore } from './creditScore';
+export { default as example } from './example';
