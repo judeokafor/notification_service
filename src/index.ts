@@ -2,14 +2,14 @@ import NodeService from '@payhippo/node-service-base';
 import * as dotenv from 'dotenv';
 
 import { exampleMiddleware } from './middlewares';
-import { message } from './routers';
+import { api } from './routers';
 
 import * as pack from '../package.json';
 
 dotenv.config();
 
 try {
-	const apps = new NodeService({
+	const apps = NodeService({
 		description: pack.description,
 		config: {
 			env: process.env._APP_ENV,
@@ -17,7 +17,7 @@ try {
 		},
 		middlewares: [exampleMiddleware],
 		name: pack.name,
-		routers: { message },
+		routers: { api },
 		version: pack.version,
 	});
 
