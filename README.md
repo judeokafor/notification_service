@@ -83,3 +83,14 @@ try {
 
 ## Importpant Important
 - You will need to reauthenticate with `npm run artifactregistry-login .npmrc` whenever you want to pull the latest version of `@payhippo/node-service-base`.
+
+- Ensure when your creating pub-sub topics to use the service name as topic name
+ example: `risk-assessment-service`, `payment-service`.
+
+- Also ensure your data in the publisher has a type in its object:
+```{
+  messageId: '123',
+  data: {
+    type: 'UPDATE_BANK_STATEMENT',
+  }
+}```
