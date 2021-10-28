@@ -1,7 +1,7 @@
 {
-  "name": "partner-api-service",
-  "version": "1.0.1",
-  "description": "External Partner endpoints",
+  "name": "EXAMPLE_SERVICE",
+  "version": "0.0.1",
+  "description": "EXAMPLE_DESCRIPTION",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
@@ -42,8 +42,6 @@
   "dependencies": {
     "@payhippo/node-service-base": "^1.1.25",
     "dotenv": "8.2.0",
-    "express": "4.17.1",
-    "fireorm": "^0.23.0",
-    "reflect-metadata": "^0.1.13"
+    "express": "4.17.1"
   }
 }

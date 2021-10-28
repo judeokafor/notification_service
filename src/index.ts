@@ -1,21 +1,21 @@
 import NodeService from '@payhippo/node-service-base';
 import * as dotenv from 'dotenv';
 
-import { fireorm } from '@middleware';
-import { api } from '@routers';
+import { exampleMiddleware } from './middlewares';
+import { api } from './routers';
 
 import * as pack from '../package.json';
 
 dotenv.config();
 
 try {
-	const apps = new NodeService({
+	const apps = NodeService({
 		description: pack.description,
 		config: {
 			env: process.env._APP_ENV,
 			secretVersion: process.env._SECRET_VERSION_ID || '',
 		},
-		middlewares: [fireorm.default],
+		middlewares: [exampleMiddleware],
 		name: pack.name,
 		routers: { api },
 		version: pack.version,
@@ -23,7 +23,5 @@ try {
 
 	apps.start();
 } catch (error) {
-	if (error instanceof SyntaxError) {
-		console.error(`Error occurred: ${error.message}`);
-	}
+	console.error(`Error occured: ${error.message}`);
 }

@@ -8,8 +8,6 @@ steps:
     - '_IMAGE=$_IMAGE'
     - '_PROJECT_ID=$_PROJECT_ID'
     - '_REGION=$_REGION'
-    - '_SECRET_VERSION_ID=$_SECRET_VERSION_ID'
-    - '_SERVICE_NAME=$_SERVICE_NAME'
 
 # Pulling Service NPM Config
 - name: node
