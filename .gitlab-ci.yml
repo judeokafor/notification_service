@@ -3,7 +3,7 @@ variables:
   SERVICE_ACCOUNT: "938043618393-compute@developer.gserviceaccount.com"
   SERVICE_ACCOUNT_STAGING: "610914703543-compute@developer.gserviceaccount.com"
   ALLOW_UNAUTHENTICATED: "true"
-  ARTIFACTS: "false"
+  ARTIFACTS: "true"
 include:
   - project: 'infrastructure/ci-template'
     ref: 'main-v1'
