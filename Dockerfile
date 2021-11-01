@@ -12,7 +12,7 @@ COPY . ./
 
 # Install production dependencies.
 # Build application code
-RUN npm ci && npm run build
+RUN npm i && npm run build
 
 # Copy local code to the container image.
 COPY . ./
