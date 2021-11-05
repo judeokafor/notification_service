@@ -1,10 +1,10 @@
-# variables:
-#   SERVICE_NAME: node-service-template
-#   SERVICE_ACCOUNT: "938043618393-compute@developer.gserviceaccount.com"
-#   SERVICE_ACCOUNT_STAGING: "610914703543-compute@developer.gserviceaccount.com"
-#   ALLOW_UNAUTHENTICATED: "true"
-#   ARTIFACTS: "true"
-# include:
-#   - project: 'infrastructure/ci-template'
-#     ref: 'main-v1'
-#     file: '.gcp-templates.yml'
+variables:
+  SERVICE_NAME: node-service-template
+  SERVICE_ACCOUNT: "938043618393-compute@developer.gserviceaccount.com"
+  SERVICE_ACCOUNT_STAGING: "610914703543-compute@developer.gserviceaccount.com"
+  ALLOW_UNAUTHENTICATED: "true"
+  ARTIFACTS: "true"
+include:
+  - project: 'infrastructure/ci-template'
+    ref: 'main-v1'
+    file: '.gcp-templates.yml'
