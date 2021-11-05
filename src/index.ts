@@ -1,4 +1,4 @@
-import NodeService from '@payhippo/node-service-base';
+import NodeService, { logger } from '@payhippo/node-service-base';
 import * as dotenv from 'dotenv';
 
 import { exampleMiddleware } from './middlewares';
@@ -9,7 +9,7 @@ import * as pack from '../package.json';
 dotenv.config();
 
 try {
-	const apps = NodeService({
+	const apps = new NodeService({
 		description: pack.description,
 		config: {
 			env: process.env._APP_ENV,
@@ -23,5 +23,5 @@ try {
 
 	apps.start();
 } catch (error) {
-	console.error(`Error occured: ${error.message}`);
+	logger.error(`Error occured: ${error.message}`);
 }
