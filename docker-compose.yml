@@ -1,0 +1,16 @@
+version: '3.6'
+services:
+  node_template_svc:
+    container_name: node_template_svc
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - ./.env
+    ports:
+      - "9090:8080"
+    networks:
+      - node_template_svc_connect
+
+networks:
+  node_template_svc_connect:

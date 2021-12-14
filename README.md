@@ -56,6 +56,15 @@ npm run lint
 npm run dev
 ```
 
+* Start Locally Using Make (Container)
+```
+make start
+```
+* Start Locally with bash (Container)
+```
+./start.sh
+```
+
 ## Example
 ```
 import NodeService from '@payhippo/node-service-template';
