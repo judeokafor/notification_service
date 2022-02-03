@@ -5,8 +5,14 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/usr/src/app/config/service-account.json
+    volumes:
+      - ./src:/usr/src/app/src
+      - ./config:/usr/src/app/config
+      - ./tests:/usr/src/app/tests
     env_file:
-      - ./.env
+      - .env
     ports:
       - "9090:8080"
     networks:
