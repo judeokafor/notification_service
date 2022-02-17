@@ -2,6 +2,8 @@ import { logger } from '@payhippo/node-service-base';
 import Mailgun, { Attachment } from 'mailgun-js';
 import { Parser } from 'json2csv';
 
+import dotenv from 'dotenv';
+
 import { Format, MessageType } from '../../../interfaces/common.enums';
 
 import IEmailProvider, {
@@ -26,11 +28,11 @@ export default class MailgunProvider extends HtmlBasedMessage implements IEmailP
 	private domain: string;
 	private mailgun: Mailgun.Mailgun;
 
-	constructor({ apiKey, domain }: MailgunProviderConstructor) {
+	constructor() {
 		super();
 
-		this.apiKey = apiKey;
-		this.domain = domain;
+		this.apiKey = process.env._MAILGUN_API_KEY || '';
+		this.domain = process.env._MAILGUN_DOMAIN || '';
 
 		this.mailgun = new Mailgun({
 			apiKey: this.apiKey || '',
@@ -213,6 +215,8 @@ export default class MailgunProvider extends HtmlBasedMessage implements IEmailP
 		} = props;
 
 		const subject = `[Payhippo${this.showEnvironment()}] ${title}`;
+
+		console.log('subject', subject);
 
 		const html = this.getTemplate({ template, data, format: Format.HTML });
 

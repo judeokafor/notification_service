@@ -11,7 +11,7 @@ dotenv.config();
  *  but for now the assumption here is that whatsapp and sms are same string sent across board;
  */
 
-const templates = {
+const templates: any = {
 	[Format.SMS]: {
 		request_money: SMS.requestMoney,
 	},

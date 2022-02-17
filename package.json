@@ -7,16 +7,18 @@
   "files": [
     "dist"
   ],
-  "author": "insert",
+  "author": "Jude Okafor",
   "license": "ISC",
   "scripts": {
-    "dev": "ts-node-dev src/index.ts",
-    "start": "node dist/index.js",
+    "start": "node ./dist/index.js",
+    "nodemon": "nodemon",
+    "dev": "npm-run-all --parallel nodemon build:dev",
+    "dev:debug": "nodemon --inspect src/index.ts",
     "lint": "eslint --fix src/",
-    "build": "webpack --env ENVIRONMENT=production --config webpack.config.js",
-    "build:dev": "webpack --env ENVIRONMENT=development --config webpack.config.js",
-    "test": "mocha -r ts-node/register src/**/*.test.ts",
-    "watch:test": "mocha -r ts-node/register --watch --watch-files src,tests src/**/*.test.ts",
+    "build": "webpack --env ENVIRONMENT=production --config webpack.config.js --progress",
+    "build:dev": "webpack --watch --env ENVIRONMENT=development --config webpack.config.js",
+    "test": "mocha -r ts-node/register tests/**/*.test.ts",
+    "watch:test": "mocha -r ts-node/register --watch --watch-files src,tests tests/**/*.test.ts",
     "artifactregistry-login": "npx google-artifactregistry-auth"
   },
   "devDependencies": {
@@ -51,6 +53,8 @@
     "express": "4.17.1",
     "json2csv": "^5.0.6",
     "mailgun-js": "^0.22.0",
+    "nodemon": "^2.0.15",
+    "npm-run-all": "^4.1.5",
     "twilio": "^3.74.0"
   }
 }
