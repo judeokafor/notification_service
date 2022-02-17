@@ -23,5 +23,7 @@ try {
 
 	apps.start();
 } catch (error) {
-	logger.error(`Error occured: ${error.message}`);
+	if (error instanceof Error) {
+		logger.error(`Error occured: ${error.message}`);
+	}
 }
