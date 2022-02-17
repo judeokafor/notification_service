@@ -1,18 +1,19 @@
 import { logger } from '@payhippo/node-service-base';
-import { Format } from '../../interfaces/common.enums';
+import { Format } from '../../../interfaces/common.enums';
 import twilio from 'twilio';
 import dotenv from 'dotenv';
 
-import ISmsProvider, { ISmsNotificationPayload } from '../../interfaces/sms/ISmsProvider.interface';
+import ISmsProvider, {
+	ISmsNotificationPayload,
+} from '../../../interfaces/sms/ISmsProvider.interface';
 import IWhatsappProvider, {
 	IWhatsappNotificationPayload,
-} from '../../interfaces/whatsapp/IWhatsappProvider.interface';
+} from '../../../interfaces/whatsapp/IWhatsappProvider.interface';
 
-import PhoneNumberBasedMessage from '../phoneNumberMessage.base';
+import PhoneNumberBasedMessage from '../../phoneNumberMessage.base';
+import { TwilioProviderConstructor } from './types';
 
 dotenv.config();
-
-type TwilioProviderConstructor = { accountSid: string; authToken: string };
 
 export default class TwilioProvider
 	extends PhoneNumberBasedMessage
