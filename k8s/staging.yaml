@@ -1,0 +1,67 @@
+service:
+  enabled: true
+  type: NodePort
+  annotations: {}
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+
+ingress:
+  annotations:
+    cert-manager.io/cluster-issuer: "lets-encrypt-nginx"
+  enabled: true
+  hosts:
+    - host: notification-service.gke-staging.payhippo.ng
+      paths:
+        - /
+      servicePort: 80
+  tls:
+    - secretName: notification-service-gke-staging-payhippo-ng
+      hosts:
+        - notification-service.gke-staging.payhippo.ng
+deployment:
+  env: &env
+    - name: APP_ENV
+      value: "staging"
+
+envFromExternalSecret:
+  - key: NOTIFICATION_SERVICE_SA_CRED_STAGING
+    name: service-account-creds
+
+
+probes:
+  enabled: true
+  livenessProbe:
+    failureThreshold: 20
+    httpGet:
+      path: /notification-service/health
+      port: http
+      scheme: HTTP
+    initialDelaySeconds: 5
+    periodSeconds: 20
+    timeoutSeconds: 3
+  readinessProbe: null
+    # failureThreshold: 20
+    # httpGet:
+    #   path: /notification-service/health
+    #   port: http
+    #   scheme: HTTP
+    # initialDelaySeconds: 5
+    # periodSeconds: 20
+    # timeoutSeconds: 3
+
+resources:
+  limits:
+    cpu: '1'
+    memory: 1.5Gi
+  requests:
+    cpu: '200m'
+    memory: 1Gi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 20
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 90

@@ -45,6 +45,7 @@ typings/
 
 # Optional npm cache directory
 .npm
+.npmrc
 
 # Optional eslint cache
 .eslintcache
@@ -63,6 +64,7 @@ typings/
 .env
 .env.test
 .env.staging
+.env.development
 .env.emulator
 
 
@@ -92,6 +94,7 @@ typings/
 
 # dist folder
 /build
+/dists
 
 # misc
 cors.json
