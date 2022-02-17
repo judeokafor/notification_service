@@ -63,6 +63,7 @@ typings/
 .env
 .env.test
 .env.staging
+.env.development
 .env.emulator
 
 
@@ -91,11 +92,14 @@ typings/
 .firebase
 
 # dist folder
+/dist
 /build
 
 # misc
 cors.json
 /exec -l
 .DS_store
-/config/**
+/config
+
+.npmrc
 package-lock.json
