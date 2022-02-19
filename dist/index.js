@@ -206,9 +206,9 @@ var MailgunProvider = /** @class */ (function (_super) {
         return this.isProductionEnvironment() ? '' : "-" + currentEnvironmrnt.toUpperCase();
     };
     MailgunProvider.prototype.getAttachment = function (payload) {
-        var type = payload.type, data = payload.data;
+        var attachmentType = payload.attachmentType, data = payload.data;
         var attachment;
-        if (type === common_enums_1.MessageType.PAYMENT_AUDIT) {
+        if (attachmentType === common_enums_1.AttachmentType.PAYMENT_AUDIT) {
             var csvData = data.csvData, date = data.date;
             var fileName = "payment-audit-" + date + ".csv";
             var json2csvParser = new json2csv_1.Parser({
@@ -221,7 +221,7 @@ var MailgunProvider = /** @class */ (function (_super) {
                 data: csvBuffer,
             });
         }
-        if (type === common_enums_1.MessageType.METRICS_CSV) {
+        if (attachmentType === common_enums_1.AttachmentType.METRICS_CSV) {
             var buffer = data.buffer;
             attachment = new this.mailgun.Attachment({
                 filename: 'metrics.csv',
@@ -243,7 +243,9 @@ var MailgunProvider = /** @class */ (function (_super) {
                     }
                 }
                 catch (error) {
-                    node_service_base_1.logger.log(error);
+                    if (error instanceof Error) {
+                        node_service_base_1.logger.error('generateAccountMangerEmail', error.message);
+                    }
                 }
                 node_service_base_1.logger.log('accountManager Email', email);
                 return [2 /*return*/, email];
@@ -268,15 +270,15 @@ var MailgunProvider = /** @class */ (function (_super) {
         }
         return recipients;
     };
-    MailgunProvider.prototype.generateEmails = function (props) {
+    MailgunProvider.prototype.generateEmailRecipient = function (props) {
         return __awaiter(this, void 0, void 0, function () {
-            var to, accountManagerId, _a, includeCC, _b, noReply, _c, partnerEmail, envBasedTo, emailsToSend, isProduction, accountManagerMail, error_1;
+            var to, accountManagerId, _a, includeCC, _b, noReply, _c, partnerEmail, recipient, cc, isProduction, accountManagerMail, error_1;
             return __generator(this, function (_d) {
                 switch (_d.label) {
                     case 0:
                         to = props.to, accountManagerId = props.accountManagerId, _a = props.includeCC, includeCC = _a === void 0 ? false : _a, _b = props.noReply, noReply = _b === void 0 ? false : _b, _c = props.partnerEmail, partnerEmail = _c === void 0 ? '' : _c;
-                        envBasedTo = process.env._DEV_TEST_EMAIL || '';
-                        emailsToSend = [];
+                        recipient = process.env._DEV_TEST_EMAIL || '';
+                        cc = [];
                         _d.label = 1;
                     case 1:
                         _d.trys.push([1, 4, , 5]);
@@ -285,66 +287,79 @@ var MailgunProvider = /** @class */ (function (_super) {
                         return [4 /*yield*/, this.generateAccountMangerEmail(accountManagerId)];
                     case 2:
                         accountManagerMail = _d.sent();
-                        emailsToSend = this.getRecipients({
+                        cc = this.getRecipients({
                             accountManagerMail: accountManagerMail,
                             includeCC: includeCC,
                             noReply: noReply,
                             partnerEmail: partnerEmail,
                         });
-                        envBasedTo = to;
+                        recipient = to;
                         _d.label = 3;
                     case 3: return [3 /*break*/, 5];
                     case 4:
                         error_1 = _d.sent();
                         if (error_1 instanceof Error) {
-                            node_service_base_1.logger.error('generateEmails', error_1.message);
+                            node_service_base_1.logger.error('generateEmailRecipient', error_1.message);
                         }
                         return [3 /*break*/, 5];
-                    case 5: return [2 /*return*/, { emailsToSend: emailsToSend, envBasedTo: envBasedTo }];
+                    case 5: return [2 /*return*/, { cc: cc, recipient: recipient }];
                 }
             });
         });
     };
     MailgunProvider.prototype.getSendOptions = function (options) {
         return __awaiter(this, void 0, void 0, function () {
-            var to, accountManagerId, _a, includeCC, _b, noReply, _c, partnerEmail, html, subject, data, type, generateEmailOptions, _d, envBasedTo, emailsToSend, attachment;
+            var to, accountManagerId, _a, includeCC, _b, noReply, _c, partnerEmail, html, subject, data, attachmentType, attachment, recipient, cc, error_2;
+            var _d;
             return __generator(this, function (_e) {
                 switch (_e.label) {
                     case 0:
-                        to = options.to, accountManagerId = options.accountManagerId, _a = options.includeCC, includeCC = _a === void 0 ? false : _a, _b = options.noReply, noReply = _b === void 0 ? false : _b, _c = options.partnerEmail, partnerEmail = _c === void 0 ? '' : _c, html = options.html, subject = options.subject, data = options.data, type = options.type;
-                        generateEmailOptions = {
-                            to: to,
-                            accountManagerId: accountManagerId,
-                            includeCC: includeCC,
-                            noReply: noReply,
-                            partnerEmail: partnerEmail,
-                        };
-                        return [4 /*yield*/, this.generateEmails(generateEmailOptions)];
-                    case 1:
-                        _d = _e.sent(), envBasedTo = _d.envBasedTo, emailsToSend = _d.emailsToSend;
+                        to = options.to, accountManagerId = options.accountManagerId, _a = options.includeCC, includeCC = _a === void 0 ? false : _a, _b = options.noReply, noReply = _b === void 0 ? false : _b, _c = options.partnerEmail, partnerEmail = _c === void 0 ? '' : _c, html = options.html, subject = options.subject, data = options.data, attachmentType = options.attachmentType;
                         attachment = this.getAttachment({
                             data: data,
-                            type: type,
+                            attachmentType: attachmentType,
                         });
-                        return [2 /*return*/, {
-                                cc: emailsToSend,
-                                from: "Payhippo " + process.env._GMAIL_ADMIN_EMAIL,
-                                html: html,
-                                subject: subject,
-                                to: envBasedTo,
-                                attachment: attachment,
-                            }];
+                        recipient = '';
+                        cc = [];
+                        _e.label = 1;
+                    case 1:
+                        _e.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, this.generateEmailRecipient({
+                                to: to,
+                                accountManagerId: accountManagerId,
+                                includeCC: includeCC,
+                                noReply: noReply,
+                                partnerEmail: partnerEmail,
+                            })];
+                    case 2:
+                        (_d = _e.sent(), recipient = _d.recipient, cc = _d.cc);
+                        return [3 /*break*/, 4];
+                    case 3:
+                        error_2 = _e.sent();
+                        if (error_2 instanceof Error) {
+                            node_service_base_1.logger.error('getSendOptions', error_2.message);
+                        }
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/, {
+                            cc: cc,
+                            from: "Payhippo " + process.env._GMAIL_ADMIN_EMAIL,
+                            html: html,
+                            subject: subject,
+                            to: recipient,
+                            attachment: attachment,
+                        }];
                 }
             });
         });
     };
     MailgunProvider.prototype.sendMail = function (props) {
         return __awaiter(this, void 0, void 0, function () {
-            var to, accountManagerId, partnerEmail, title, template, _a, includeCC, _b, noReply, data, type, subject, html, mailgunSendOptions, isProduction, isEmailValid, error_2;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
+            var to, title, template, data, meta, _a, accountManagerId, _b, partnerEmail, _c, includeCC, _d, noReply, _e, attachmentType, subject, html, mailgunSendOptions, isProduction, isEmailValid, error_3;
+            return __generator(this, function (_f) {
+                switch (_f.label) {
                     case 0:
-                        to = props.to, accountManagerId = props.accountManagerId, partnerEmail = props.partnerEmail, title = props.title, template = props.template, _a = props.includeCC, includeCC = _a === void 0 ? false : _a, _b = props.noReply, noReply = _b === void 0 ? false : _b, data = props.data, type = props.type;
+                        to = props.to, title = props.title, template = props.template, data = props.data, meta = props.meta;
+                        _a = meta.accountManagerId, accountManagerId = _a === void 0 ? '' : _a, _b = meta.partnerEmail, partnerEmail = _b === void 0 ? '' : _b, _c = meta.includeCC, includeCC = _c === void 0 ? false : _c, _d = meta.noReply, noReply = _d === void 0 ? false : _d, _e = meta.attachmentType, attachmentType = _e === void 0 ? undefined : _e;
                         subject = "[Payhippo" + this.showEnvironment() + "] " + title;
                         html = this.getTemplate({ template: template, data: data, format: common_enums_1.Format.HTML });
                         return [4 /*yield*/, this.getSendOptions({
@@ -356,26 +371,26 @@ var MailgunProvider = /** @class */ (function (_super) {
                                 noReply: noReply,
                                 partnerEmail: partnerEmail,
                                 data: data,
-                                type: type,
+                                attachmentType: attachmentType,
                             })];
                     case 1:
-                        mailgunSendOptions = _c.sent();
-                        _c.label = 2;
+                        mailgunSendOptions = _f.sent();
+                        _f.label = 2;
                     case 2:
-                        _c.trys.push([2, 5, , 6]);
+                        _f.trys.push([2, 5, , 6]);
                         isProduction = this.isProductionEnvironment();
                         isEmailValid = this.verifyEmail(to);
                         if (!(isProduction && isEmailValid)) return [3 /*break*/, 4];
                         return [4 /*yield*/, this.mailgun.messages().send(mailgunSendOptions)];
                     case 3:
-                        _c.sent();
+                        _f.sent();
                         return [2 /*return*/];
                     case 4:
                         node_service_base_1.logger.log("Dev call sending email to " + to);
                         return [3 /*break*/, 6];
                     case 5:
-                        error_2 = _c.sent();
-                        node_service_base_1.logger.error(error_2);
+                        error_3 = _f.sent();
+                        node_service_base_1.logger.error(error_3);
                         return [3 /*break*/, 6];
                     case 6: return [2 /*return*/];
                 }
@@ -405,7 +420,7 @@ module.exports = require("json2csv");;
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.MessageType = exports.Format = exports.TEMPLATE_TYPE = exports.NOTIFICATION_CHANNEL = void 0;
+exports.AttachmentType = exports.Format = exports.TEMPLATE_TYPE = exports.NOTIFICATION_CHANNEL = void 0;
 var NOTIFICATION_CHANNEL;
 (function (NOTIFICATION_CHANNEL) {
     NOTIFICATION_CHANNEL["WHATSAPP"] = "WHATSAPP";
@@ -417,20 +432,19 @@ var NOTIFICATION_CHANNEL;
 })(NOTIFICATION_CHANNEL = exports.NOTIFICATION_CHANNEL || (exports.NOTIFICATION_CHANNEL = {}));
 var TEMPLATE_TYPE;
 (function (TEMPLATE_TYPE) {
-    TEMPLATE_TYPE["USER_CREATED"] = "user_created";
+    TEMPLATE_TYPE["WELCOME_EMAIL"] = "user_created";
 })(TEMPLATE_TYPE = exports.TEMPLATE_TYPE || (exports.TEMPLATE_TYPE = {}));
 var Format;
 (function (Format) {
     Format["HTML"] = "HTML";
     Format["SMS"] = "SMS";
     Format["SLACK"] = "SLACK";
-    Format["PUSH_NOTIFICATION"] = "PUSH_NOTIFICATION";
 })(Format = exports.Format || (exports.Format = {}));
-var MessageType;
-(function (MessageType) {
-    MessageType["PAYMENT_AUDIT"] = "PAYMENT_AUDIT";
-    MessageType["METRICS_CSV"] = "METRICS_CSV";
-})(MessageType = exports.MessageType || (exports.MessageType = {}));
+var AttachmentType;
+(function (AttachmentType) {
+    AttachmentType["PAYMENT_AUDIT"] = "PAYMENT_AUDIT";
+    AttachmentType["METRICS_CSV"] = "METRICS_CSV";
+})(AttachmentType = exports.AttachmentType || (exports.AttachmentType = {}));
 
 
 /***/ }),
@@ -491,6 +505,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 var common_enums_1 = __webpack_require__(8);
 var templates_1 = __webpack_require__(11);
 var dotenv_1 = __importDefault(__webpack_require__(2));
+var types_1 = __webpack_require__(38);
 dotenv_1.default.config();
 /**
  * @TODO: we can have a different template for whatsapp,
@@ -503,13 +518,16 @@ var templates = (_a = {},
     _a[common_enums_1.Format.HTML] = {
         welcome: templates_1.EMAIL.welcomeEmail,
     },
+    _a[common_enums_1.Format.SLACK] = {
+        welcome: templates_1.EMAIL.welcomeEmail,
+    },
     _a);
 var Message = /** @class */ (function () {
     function Message() {
     }
     Message.prototype.isProductionEnvironment = function () {
-        var environment = "development" || 0;
-        return ['production'].includes(environment);
+        var environment = ("development" || 0).toUpperCase();
+        return [types_1.Environment.PRODUCTION].includes(environment);
     };
     Message.prototype.getTemplate = function (props) {
         var format = props.format, template = props.template, data = props.data;
@@ -586,7 +604,8 @@ exports.default = {
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 function default_1(data) {
-    return 'Welcome';
+    var firstName = data.firstName;
+    return 'Welcome Legend' + firstName;
 }
 exports.default = default_1;
 
@@ -737,11 +756,12 @@ var TermiiProvider = /** @class */ (function (_super) {
     };
     TermiiProvider.prototype.sendSms = function (props) {
         return __awaiter(this, void 0, void 0, function () {
-            var template, data, to, _a, useDnd, message, receipient, canSendSms, sendData, error_1;
+            var template, data, to, meta, _a, useDnd, message, receipient, canSendSms, sendData, error_1;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        template = props.template, data = props.data, to = props.to, _a = props.useDnd, useDnd = _a === void 0 ? false : _a;
+                        template = props.template, data = props.data, to = props.to, meta = props.meta;
+                        _a = meta.useDnd, useDnd = _a === void 0 ? false : _a;
                         message = this.getTemplate({ template: template, data: data, format: common_enums_1.Format.SMS });
                         receipient = this.formatPhoneNumber(to);
                         canSendSms = this.canSendSms(receipient) && this.isProductionEnvironment();
@@ -1286,7 +1306,7 @@ var PubSubRouterType;
 (function (PubSubRouterType) {
     PubSubRouterType["SEND_NOTIFICATION"] = "SEND_NOTIFICATION";
 })(PubSubRouterType = exports.PubSubRouterType || (exports.PubSubRouterType = {}));
-var notifyController = container_awilix_1.default.resolve('notificationService');
+var notificationController = container_awilix_1.default.resolve('notificationController');
 var pubSubRouter = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var type, logger, _a;
     return __generator(this, function (_b) {
@@ -1294,7 +1314,7 @@ var pubSubRouter = function (req, res) { return __awaiter(void 0, void 0, void 0
             case 0:
                 type = req.body.type;
                 logger = req.appServices.logger;
-                logger.log('Calling pubSubRouter ==>', type);
+                logger.log('Calling pubSubRouter body ==>', type);
                 _a = type;
                 switch (_a) {
                     case PubSubRouterType.SEND_NOTIFICATION: return [3 /*break*/, 1];
@@ -1302,7 +1322,7 @@ var pubSubRouter = function (req, res) { return __awaiter(void 0, void 0, void 0
                 return [3 /*break*/, 3];
             case 1:
                 logger.log('sending notification');
-                return [4 /*yield*/, notifyController.notify(req, res)];
+                return [4 /*yield*/, notificationController.notify(req, res)];
             case 2:
                 _b.sent();
                 return [3 /*break*/, 3];
@@ -1474,6 +1494,12 @@ module.exports = require("awilix");;
 /***/ ((module) => {
 
 module.exports = JSON.parse('{"name":"notification-service","version":"1.0.1","description":"Handles payhippo notification","main":"./dist/index.js","types":"./dist/index.d.ts","files":["dist"],"author":"Jude Okafor","license":"ISC","scripts":{"start":"node ./dist/index.js","nodemon":"nodemon","dev":"npm-run-all --parallel nodemon build:dev","dev:debug":"nodemon --inspect src/index.ts","lint":"eslint --fix src/","build":"webpack --env ENVIRONMENT=production --config webpack.config.js --progress","build:dev":"webpack --watch --env ENVIRONMENT=development --config webpack.config.js","test":"mocha -r ts-node/register tests/**/*.test.ts","watch:test":"mocha -r ts-node/register --watch --watch-files src,tests tests/**/*.test.ts","artifactregistry-login":"npx google-artifactregistry-auth"},"devDependencies":{"@types/express":"4.17.12","@types/json2csv":"^5.0.3","@types/mailgun-js":"^0.22.12","@types/node":"15.9.0","@typescript-eslint/eslint-plugin":"4.26.0","@typescript-eslint/parser":"4.26.0","clean-webpack-plugin":"4.0.0-alpha.0","eslint":"7.27.0","eslint-config-prettier":"8.3.0","eslint-config-standard":"16.0.3","eslint-plugin-import":"2.23.4","eslint-plugin-node":"11.1.0","eslint-plugin-prettier":"3.4.0","eslint-plugin-promise":"5.1.0","moment-timezone-data-webpack-plugin":"1.5.0","prettier":"2.3.0","ts-loader":"9.2.3","ts-node-dev":"1.1.6","typescript":"4.3.2","webpack":"5.38.1","webpack-cli":"4.7.2","webpack-node-externals":"3.0.0"},"dependencies":{"@payhippo/node-service-base":"^1.2.13","@sendgrid/mail":"^7.6.1","awilix":"^6.1.0","dotenv":"8.2.0","express":"4.17.1","json2csv":"^5.0.6","mailgun-js":"^0.22.0","nodemon":"^2.0.15","npm-run-all":"^4.1.5","twilio":"^3.74.0"}}');
+
+/***/ }),
+/* 38 */
+/***/ ((module) => {
+
+module.exports = require("@payhippo/node-service-base/dist/types");;
 
 /***/ })
 /******/ 	]);

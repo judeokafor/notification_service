@@ -2,7 +2,7 @@ import { logger } from '@payhippo/node-service-base';
 import Mailgun, { Attachment } from 'mailgun-js';
 import { Parser } from 'json2csv';
 
-import { Format, MessageType } from '../../../interfaces/common.enums';
+import { Format, AttachmentType } from '../../../interfaces/common.enums';
 
 import IEmailProvider, {
 	IEmailNotificationPayload,
@@ -15,7 +15,7 @@ import {
 	GetAttachmentPayload,
 	GenerateRecipientProp,
 	GenerateEmailRecipientProp,
-	GenerateEmailRecipients,
+	EmailRecipients,
 	GetSendOptionsProps,
 	MailgunOptions,
 } from './types';
@@ -48,11 +48,11 @@ export default class MailgunProvider extends HtmlBasedMessage implements IEmailP
 	}
 
 	private getAttachment(payload: GetAttachmentPayload): Attachment | undefined {
-		const { type, data } = payload;
+		const { attachmentType, data } = payload;
 
 		let attachment: Attachment | undefined;
 
-		if (type === MessageType.PAYMENT_AUDIT) {
+		if (attachmentType === AttachmentType.PAYMENT_AUDIT) {
 			const { csvData, date } = data;
 			const fileName = `payment-audit-${date}.csv`;
 
@@ -70,7 +70,7 @@ export default class MailgunProvider extends HtmlBasedMessage implements IEmailP
 			});
 		}
 
-		if (type === MessageType.METRICS_CSV) {
+		if (attachmentType === AttachmentType.METRICS_CSV) {
 			const { buffer } = data;
 
 			attachment = new this.mailgun.Attachment({
@@ -93,7 +93,9 @@ export default class MailgunProvider extends HtmlBasedMessage implements IEmailP
 				email = 'jude.okafor@payhippo.ng';
 			}
 		} catch (error) {
-			logger.log(error);
+			if (error instanceof Error) {
+				logger.error('generateAccountMangerEmail', error.message);
+			}
 		}
 
 		logger.log('accountManager Email', email);
@@ -124,9 +126,9 @@ export default class MailgunProvider extends HtmlBasedMessage implements IEmailP
 		return recipients;
 	}
 
-	private async generateEmails(
+	private async generateEmailRecipient(
 		props: GenerateEmailRecipientProp
-	): Promise<GenerateEmailRecipients> {
+	): Promise<EmailRecipients> {
 		const {
 			to,
 			accountManagerId,
@@ -135,8 +137,8 @@ export default class MailgunProvider extends HtmlBasedMessage implements IEmailP
 			partnerEmail = '',
 		} = props;
 
-		let envBasedTo = process.env._DEV_TEST_EMAIL || '';
-		let emailsToSend = [] as string[];
+		let recipient = process.env._DEV_TEST_EMAIL || '';
+		let cc = [] as string[];
 
 		try {
 			const isProduction = this.isProductionEnvironment();
@@ -144,22 +146,22 @@ export default class MailgunProvider extends HtmlBasedMessage implements IEmailP
 			if (isProduction) {
 				const accountManagerMail = await this.generateAccountMangerEmail(accountManagerId);
 
-				emailsToSend = this.getRecipients({
+				cc = this.getRecipients({
 					accountManagerMail,
 					includeCC,
 					noReply,
 					partnerEmail,
 				});
 
-				envBasedTo = to;
+				recipient = to;
 			}
 		} catch (error) {
 			if (error instanceof Error) {
-				logger.error('generateEmails', error.message);
+				logger.error('generateEmailRecipient', error.message);
 			}
 		}
 
-		return { emailsToSend, envBasedTo };
+		return { cc, recipient };
 	}
 
 	private async getSendOptions(options: GetSendOptionsProps): Promise<MailgunOptions> {
@@ -172,46 +174,51 @@ export default class MailgunProvider extends HtmlBasedMessage implements IEmailP
 			html,
 			subject,
 			data,
-			type,
+			attachmentType,
 		} = options;
-
-		const generateEmailOptions: GenerateEmailRecipientProp = {
-			to,
-			accountManagerId,
-			includeCC,
-			noReply,
-			partnerEmail,
-		};
-
-		const { envBasedTo, emailsToSend } = await this.generateEmails(generateEmailOptions);
 
 		const attachment = this.getAttachment({
 			data,
-			type,
+			attachmentType,
 		});
 
+		let recipient = '';
+		let cc = [] as string[];
+
+		try {
+			({ recipient, cc } = await this.generateEmailRecipient({
+				to,
+				accountManagerId,
+				includeCC,
+				noReply,
+				partnerEmail,
+			}));
+		} catch (error) {
+			if (error instanceof Error) {
+				logger.error('getSendOptions', error.message);
+			}
+		}
+
 		return {
-			cc: emailsToSend,
+			cc,
 			from: `Payhippo ${process.env._GMAIL_ADMIN_EMAIL}`,
 			html,
 			subject,
-			to: envBasedTo,
+			to: recipient,
 			attachment,
 		};
 	}
 
 	public async sendMail(props: IEmailNotificationPayload): Promise<void> {
+		const { to, title, template, data, meta } = props;
+
 		const {
-			to,
-			accountManagerId,
-			partnerEmail,
-			title,
-			template,
+			accountManagerId = '',
+			partnerEmail = '',
 			includeCC = false,
 			noReply = false,
-			data,
-			type,
-		} = props;
+			attachmentType = undefined,
+		} = meta;
 
 		const subject = `[Payhippo${this.showEnvironment()}] ${title}`;
 
@@ -226,7 +233,7 @@ export default class MailgunProvider extends HtmlBasedMessage implements IEmailP
 			noReply,
 			partnerEmail,
 			data,
-			type,
+			attachmentType,
 		});
 
 		try {

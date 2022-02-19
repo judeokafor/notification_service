@@ -1,8 +1,8 @@
 import { Attachment } from 'mailgun-js';
-import { MessageType } from '../../../interfaces/common.enums';
+import { AttachmentType } from '../../../interfaces/common.enums';
 
 export type GetAttachmentPayload = {
-	type: MessageType;
+	attachmentType: AttachmentType | undefined;
 	data: any;
 };
 
@@ -23,12 +23,12 @@ export type MailgunOptions = {
 	from: string;
 	bcc?: string[];
 	cc: string[];
-	attachment?: Attachment;
+	attachment?: Attachment | undefined;
 };
 
 export type MailgunProviderConstructor = { apiKey: string; domain: string };
 
-export type GenerateEmailRecipients = { emailsToSend: string[]; envBasedTo: string };
+export type EmailRecipients = { cc: string[]; recipient: string };
 
 export type GenerateEmailRecipientProp = MetaOptions & {
 	to: string;
@@ -37,8 +37,7 @@ export type GenerateEmailRecipientProp = MetaOptions & {
 
 export type GetSendOptionsProps = GenerateEmailRecipientProp & {
 	subject: string;
-	attachment?: Attachment;
 	html: string;
 	data: Record<string, unknown>;
-	type: MessageType;
+	attachmentType: AttachmentType | undefined;
 };

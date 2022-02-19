@@ -1,8 +1,8 @@
-import { IBaseNotificationPayload } from '../common.interface';
+import { IBaseNotificationPayload, NotificationMeta } from '../common.interface';
 
 export interface ISmsNotificationPayload extends IBaseNotificationPayload {
 	to: string;
-	useDnd?: boolean;
+	meta: NotificationMeta;
 }
 
 export default interface ISmsProvider {

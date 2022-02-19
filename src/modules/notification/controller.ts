@@ -4,11 +4,11 @@ import NotificationService from './service';
 
 import { NotificationPayload } from './types';
 
-interface INotifyController {
+export interface INotificationController {
 	notify: (req: Request, res: Response) => Promise<Response<any, Record<string, any>>>;
 }
 
-export default class NotificationController implements INotifyController {
+export default class NotificationController implements INotificationController {
 	private notificationService: NotificationService;
 
 	constructor({ notificationService }: { notificationService: NotificationService }) {

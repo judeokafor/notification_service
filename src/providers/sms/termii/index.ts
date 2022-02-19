@@ -32,7 +32,9 @@ export default class TermiiProvider extends PhoneNumberMessage implements ISmsPr
 	}
 
 	async sendSms(props: ISmsNotificationPayload): Promise<void> {
-		const { template, data, to, useDnd = false } = props;
+		const { template, data, to, meta } = props;
+
+		const { useDnd = false } = meta;
 
 		const message = this.getTemplate({ template, data, format: Format.SMS });
 

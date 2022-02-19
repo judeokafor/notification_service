@@ -1,4 +1,4 @@
-import { NOTIFICATION_CHANNEL, TEMPLATE_TYPE } from './common.enums';
+import { AttachmentType, NOTIFICATION_CHANNEL, TEMPLATE_TYPE } from './common.enums';
 import { GetTemplateProps } from './common.types';
 
 export interface IBaseNotificationPayload {
@@ -6,6 +6,17 @@ export interface IBaseNotificationPayload {
 	template: TEMPLATE_TYPE;
 	data: Record<string, unknown>;
 }
+
+export type NotificationMeta = {
+	// emails
+	accountManagerId?: string;
+	partnerEmail?: string;
+	includeCC?: boolean;
+	noReply?: boolean;
+	attachmentType?: AttachmentType;
+	// sms
+	useDnd?: boolean;
+};
 export interface IBaseMessage {
 	getTemplate(props: GetTemplateProps): string;
 	isProductionEnvironment(): boolean;
