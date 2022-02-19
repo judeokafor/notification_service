@@ -8,16 +8,17 @@ export enum PubSubRouterType {
 	SEND_NOTIFICATION = 'SEND_NOTIFICATION',
 }
 
-const notifyController: NotificationController = container.resolve('notifyController');
+const notifyController: NotificationController = container.resolve('notificationService');
 const pubSubRouter = async (req: Request, res: Response) => {
-	const { type, channels, data } = req.body;
+	const { type } = req.body;
 	const { logger } = req.appServices;
 
-	await notifyController.notify(req, res);
 	logger.log('Calling pubSubRouter ==>', type);
+
 	switch (type) {
 		case PubSubRouterType.SEND_NOTIFICATION:
 			logger.log('sending notification');
+			await notifyController.notify(req, res);
 			break;
 		default:
 	}

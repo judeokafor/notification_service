@@ -1,7 +1,5 @@
 import { logger } from '@payhippo/node-service-base';
 import axios from 'axios';
-import dotenv from 'dotenv';
-
 import { Format } from '../../../interfaces/common.enums';
 
 import ISmsProvider, {
@@ -10,8 +8,6 @@ import ISmsProvider, {
 
 import PhoneNumberMessage from '../../phoneNumberMessage.base';
 import { GetSendOptions, TermiiProviderConstructor } from './types';
-
-dotenv.config();
 
 export default class TermiiProvider extends PhoneNumberMessage implements ISmsProvider {
 	private apiKey: string;

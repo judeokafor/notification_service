@@ -1,19 +1,12 @@
-import * as awilix from 'awilix';
-import { NotificationController } from './modules/notification';
-import MailgunProvider from './providers/email/mailgun';
-// import TermiiProvider from './providers/sms/termii';
-// import TwilioProvider from './providers/whatsapp/twillo';
+import { NotificationController, NotificationService } from './modules/notification';
 
-const container = awilix.createContainer({
-	injectionMode: awilix.InjectionMode.PROXY,
-});
+import { container } from '@payhippo/node-service-base';
+
+import { asClass } from 'awilix';
 
 container.register({
-	// smsProvider: awilix.asClass(TermiiProvider),
-	emailProvider: awilix.asClass(MailgunProvider),
-	// whatsapp: awilix.asClass(TwilioProvider),
-
-	notifyController: awilix.asClass(NotificationController),
+	notificationController: asClass(NotificationController),
+	notificationService: asClass(NotificationService),
 });
 
 export default container;

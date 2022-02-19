@@ -7,20 +7,17 @@ import ISlackProvider, {
 } from '../../interfaces/slack/ISlackProvider.interface';
 
 import Message from '../Message.base';
-
-type SlackProviderConstructor = {
-	teamId: string;
-	channelId: string;
-	token: string;
-};
+import { SlackProviderConstructor } from './types';
 
 export default class SlackProvider extends Message implements ISlackProvider {
 	private teamId: string;
 	private channelId: string;
 	private token: string;
 
-	constructor({ teamId, channelId, token }: SlackProviderConstructor) {
+	constructor(constructorProps: SlackProviderConstructor) {
 		super();
+
+		const { teamId, channelId, token } = constructorProps;
 
 		this.teamId = teamId;
 		this.channelId = channelId;
@@ -37,7 +34,6 @@ export default class SlackProvider extends Message implements ISlackProvider {
 				await axios.post(`/${this.teamId}/${this.channelId}/${this.token}`, {
 					text: message,
 				});
-
 				return;
 			}
 

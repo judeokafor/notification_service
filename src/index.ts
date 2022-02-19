@@ -1,7 +1,12 @@
 import NodeService, { logger } from '@payhippo/node-service-base';
 import * as dotenv from 'dotenv';
 
-import { exampleMiddleware } from './middlewares';
+import {
+	emailProviderMiddleware,
+	whatsappProviderMiddleware,
+	smsProviderMiddleware,
+	slackProviderMiddleware,
+} from './middlewares';
 import { api, message } from './routers';
 
 import * as pack from '../package.json';
@@ -15,7 +20,12 @@ try {
 			env: process.env._APP_ENV,
 			secretVersion: process.env._SECRET_VERSION_ID || '',
 		},
-		middlewares: [exampleMiddleware],
+		middlewares: [
+			emailProviderMiddleware,
+			whatsappProviderMiddleware,
+			smsProviderMiddleware,
+			slackProviderMiddleware,
+		],
 		name: pack.name,
 		routers: { api, message },
 		version: pack.version,

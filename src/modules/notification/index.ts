@@ -1,4 +1,4 @@
-// import NotificationService from './notification.service';
-import NotificationController from './notification.controller';
+import NotificationService from './service';
+import NotificationController from './controller';
 
-export { /** NotificationService */ NotificationController };
+export { NotificationService, NotificationController };

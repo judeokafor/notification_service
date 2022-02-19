@@ -3,6 +3,10 @@
 
 import Analytics from 'analytics-node';
 import * as admin from 'firebase-admin';
+import IEmailProvider from '../../src/interfaces/email/IEmailProvder.interface';
+import ISlackProvider from '../../src/interfaces/slack/ISlackProvider.interface';
+import ISmsProvider from '../../src/interfaces/sms/ISmsProvider.interface';
+import IWhatsappProvider from '../../src/interfaces/whatsapp/IWhatsappProvider.interface';
 
 type PublishMessagePayload = {
 	data: any;
@@ -11,33 +15,32 @@ type PublishMessagePayload = {
 
 type Logger = Console | any;
 
-/**
- * Example Secrets Pattern
- * {
-	credit_registry?: {
+type NotificationServiceSecret = {
+	mailgun?: {
+		apiKey: string;
+		domain: string;
+	};
+
+	termii?: {
+		apiKey: string;
+	};
+
+	slack?: {
+		teamId: string;
+		channelId: string;
+		token: string;
+	};
+
+	twillo?: {
+		accountSid: string;
+		authToken: string;
+	};
+
+	gmail?: {
 		email: string;
 		password: string;
-		subscriber_id: string;
-		test_bvn: string;
 	};
-	gmail_auth?: {
-		email: string;
-		password: string;
-	};
-	verified_ng?: {
-		bank_verify_api_key: string;
-		bvn_simple_api_key: string;
-		cac_api_key: string;
-		frsc_api_key: string;
-		nin_api_key: string;
-		passport_api_key: string;
-		tin_api_key: string;
-		vin_api_key: string;
-		user_id: string;
-	};
-}
- */
-type SecretsCopy = any;
+};
 
 declare global {
 	namespace Express {
@@ -48,12 +51,19 @@ declare global {
 					firestore: admin.firestore.Firestore;
 					getTimestamp: () => admin.firestore.Timestamp;
 				};
+
 				logger: Logger;
+
 				pubSub: {
 					publishMessage: (payload: PublishMessagePayload) => Promise<string>;
 				};
+
+				emailProvider: IEmailProvider;
+				smsProvider: ISmsProvider;
+				whatsappProvider: IWhatsappProvider;
+				slackProvider: ISlackProvider;
 			};
-			appSecrets: SecretsCopy;
+			appSecrets: NotificationServiceSecret;
 		}
 	}
 }

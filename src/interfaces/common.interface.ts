@@ -2,7 +2,7 @@ import { NOTIFICATION_CHANNEL, TEMPLATE_TYPE } from './common.enums';
 import { GetTemplateProps } from './common.types';
 
 export interface IBaseNotificationPayload {
-	channel: NOTIFICATION_CHANNEL;
+	channels: NOTIFICATION_CHANNEL[];
 	template: TEMPLATE_TYPE;
 	data: Record<string, unknown>;
 }
