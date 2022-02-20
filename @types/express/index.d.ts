@@ -3,6 +3,7 @@
 
 import Analytics from 'analytics-node';
 import * as admin from 'firebase-admin';
+import { IUrlShortnerProvider } from '../../src/interfaces/common.interface';
 import IEmailProvider from '../../src/interfaces/email/IEmailProvder.interface';
 import ISlackProvider from '../../src/interfaces/slack/ISlackProvider.interface';
 import ISmsProvider from '../../src/interfaces/sms/ISmsProvider.interface';
@@ -36,9 +37,8 @@ type NotificationServiceSecret = {
 		authToken: string;
 	};
 
-	gmail?: {
-		email: string;
-		password: string;
+	bitly?: {
+		token: string;
 	};
 };
 
@@ -62,6 +62,7 @@ declare global {
 				smsProvider: ISmsProvider;
 				whatsappProvider: IWhatsappProvider;
 				slackProvider: ISlackProvider;
+				urlShortnerProvider: IUrlShortnerProvider;
 			};
 			appSecrets: NotificationServiceSecret;
 		}

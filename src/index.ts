@@ -6,7 +6,9 @@ import {
 	whatsappProviderMiddleware,
 	smsProviderMiddleware,
 	slackProviderMiddleware,
+	urlShortnerProviderMiddleware,
 } from './middlewares';
+
 import { api, message } from './routers';
 
 import * as pack from '../package.json';
@@ -25,6 +27,7 @@ try {
 			whatsappProviderMiddleware,
 			smsProviderMiddleware,
 			slackProviderMiddleware,
+			urlShortnerProviderMiddleware,
 		],
 		name: pack.name,
 		routers: { api, message },

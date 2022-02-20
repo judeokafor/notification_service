@@ -36,7 +36,9 @@ export default class TermiiProvider extends PhoneNumberMessage implements ISmsPr
 
 		const { useDnd = false } = meta;
 
-		const message = this.getTemplate({ template, data, format: Format.SMS });
+		const modifiedData = await this.modifyData(data);
+
+		const message = this.getTemplate({ template, data: modifiedData, format: Format.SMS });
 
 		const receipient = this.formatPhoneNumber(to);
 

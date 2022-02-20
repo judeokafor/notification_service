@@ -14,15 +14,15 @@ dotenv.config();
 
 const templates: Record<Format, Record<string, (data: any) => string>> = {
 	[Format.SMS]: {
-		request_money: SMS.requestMoney,
+		disbursalFailure: SMS.disbursalFailure,
 	},
 
 	[Format.HTML]: {
-		welcome: EMAIL.welcomeEmail,
+		disbursalFailure: EMAIL.disbursalFailure,
 	},
 
 	[Format.SLACK]: {
-		welcome: EMAIL.welcomeEmail,
+		disbursalFailure: EMAIL.disbursalFailure,
 	},
 };
 

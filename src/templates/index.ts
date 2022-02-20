@@ -1,2 +1,2 @@
-export { default as SMS } from './sms';
-export { default as EMAIL } from './email';
+export * as SMS from './sms';
+export * as EMAIL from './email';

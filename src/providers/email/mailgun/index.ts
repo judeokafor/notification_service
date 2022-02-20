@@ -201,7 +201,7 @@ export default class MailgunProvider extends HtmlBasedMessage implements IEmailP
 
 		return {
 			cc,
-			from: `Payhippo ${process.env._GMAIL_ADMIN_EMAIL}`,
+			from: `Payhippo ${process.env._ADMIN_EMAIL}`,
 			html,
 			subject,
 			to: recipient,

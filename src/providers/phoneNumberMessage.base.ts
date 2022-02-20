@@ -1,8 +1,19 @@
 import { logger } from '@payhippo/node-service-base';
-import { IPhoneNumberMessage } from '../interfaces/common.interface';
+import { IPhoneNumberMessage, IUrlShortnerProvider } from '../interfaces/common.interface';
+import { abbreviateName } from '../utils';
 import Message from './Message.base';
+import BitlyProvider from './urlShortner/bitly';
 
 abstract class PhoneNumberBasedMessage extends Message implements IPhoneNumberMessage {
+	private urlShortnerProvider: IUrlShortnerProvider;
+	constructor() {
+		super();
+
+		this.urlShortnerProvider = new BitlyProvider({
+			token: process.env._BITLY_TOKEN || '',
+		});
+	}
+
 	canSendSms(to: string): boolean {
 		let isValid = true;
 
@@ -30,6 +41,18 @@ abstract class PhoneNumberBasedMessage extends Message implements IPhoneNumberMe
 		logger.error('Invalid phone number passed', phoneNumber);
 
 		return '';
+	}
+
+	async modifyData(data: Record<string, any>): Promise<Record<string, unknown>> {
+		if (data.url) {
+			data.url = await this.urlShortnerProvider.shortenUrl(data.url);
+		}
+
+		if (data.businessOwnerName) {
+			data.businessOwnerName = abbreviateName(data.businessOwnerName);
+		}
+
+		return data;
 	}
 }
 
