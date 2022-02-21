@@ -29,7 +29,6 @@ export interface IUrlShortnerProvider {
 export interface IPhoneNumberMessage extends IBaseMessage {
 	canSendSms(to: string): boolean;
 	formatPhoneNumber(phoneNumber: string): string;
-	modifyData(data: Record<string, string>): Promise<Record<string, unknown>>;
 }
 export interface IHtmlMessage extends IBaseMessage {
 	verifyEmail(email: string): boolean;

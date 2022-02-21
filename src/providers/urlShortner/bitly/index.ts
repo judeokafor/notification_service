@@ -8,10 +8,8 @@ import { BitlyProviderConstructor } from './types';
 export default class BitlyProvider implements IUrlShortnerProvider {
 	private token: string;
 
-	constructor(constructorProps: BitlyProviderConstructor) {
-		const { token } = constructorProps;
-
-		this.token = token;
+	constructor({ env }: BitlyProviderConstructor) {
+		this.token = env._BITLY_TOKEN;
 	}
 
 	public async shortenUrl(url: string): Promise<string> {

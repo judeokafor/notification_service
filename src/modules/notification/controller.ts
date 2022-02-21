@@ -19,7 +19,7 @@ export default class NotificationController implements INotificationController {
 		req: Request,
 		res: Response
 	) => {
-		const { appServices, body } = req;
+		const { body } = req;
 
 		const { channels = [] } = body as NotificationPayload;
 
@@ -30,7 +30,6 @@ export default class NotificationController implements INotificationController {
 				this.notificationService.getNotificationChannel({
 					channel,
 					payload: body,
-					appServices,
 				})
 			);
 		});

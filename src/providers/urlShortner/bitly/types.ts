@@ -1,3 +1,5 @@
 export type BitlyProviderConstructor = {
-	token: string;
+	env: {
+		_BITLY_TOKEN: string;
+	};
 };

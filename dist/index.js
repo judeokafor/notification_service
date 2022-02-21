@@ -28,7 +28,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 var node_service_base_1 = __importStar(__webpack_require__(1));
 var dotenv = __importStar(__webpack_require__(2));
 var routers_1 = __webpack_require__(3);
-var pack = __importStar(__webpack_require__(79));
+var pack = __importStar(__webpack_require__(80));
 dotenv.config();
 try {
     var apps = new node_service_base_1.default({
@@ -228,10 +228,10 @@ var awilix_1 = __webpack_require__(10);
 var notification_1 = __webpack_require__(11);
 var node_service_base_1 = __webpack_require__(1);
 var mailgun_1 = __importDefault(__webpack_require__(15));
-var termii_1 = __importDefault(__webpack_require__(72));
-var slack_1 = __importDefault(__webpack_require__(75));
-var twillo_1 = __importDefault(__webpack_require__(76));
-var bitly_1 = __importDefault(__webpack_require__(78));
+var termii_1 = __importDefault(__webpack_require__(73));
+var slack_1 = __importDefault(__webpack_require__(76));
+var twillo_1 = __importDefault(__webpack_require__(77));
+var bitly_1 = __importDefault(__webpack_require__(79));
 node_service_base_1.container.register({
     notificationController: awilix_1.asClass(notification_1.NotificationController),
     notificationService: awilix_1.asClass(notification_1.NotificationService),
@@ -274,23 +274,28 @@ exports.NotificationController = controller_1.default;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 var common_enums_1 = __webpack_require__(13);
 var NotificationService = /** @class */ (function () {
-    function NotificationService() {
+    function NotificationService(props) {
+        var _this = this;
         this.getNotificationChannel = function (props) {
-            var channel = props.channel, payload = props.payload, appServices = props.appServices;
-            var emailProvider = appServices.emailProvider, smsProvider = appServices.smsProvider, whatsappProvider = appServices.whatsappProvider, slackProvider = appServices.slackProvider;
+            var channel = props.channel, payload = props.payload;
             switch (channel) {
                 case common_enums_1.NOTIFICATION_CHANNEL.EMAIL:
-                    return emailProvider.sendMail(payload);
+                    return _this.emailProvider.sendMail(payload);
                 case common_enums_1.NOTIFICATION_CHANNEL.SMS:
-                    return smsProvider.sendSms(payload);
+                    return _this.smsProvider.sendSms(payload);
                 case common_enums_1.NOTIFICATION_CHANNEL.WHATSAPP:
-                    return whatsappProvider.sendWhatsapp(payload);
+                    return _this.whatsappProvider.sendWhatsapp(payload);
                 case common_enums_1.NOTIFICATION_CHANNEL.SLACK:
-                    return slackProvider.sendSlackMessage(payload);
+                    return _this.slackProvider.sendSlackMessage(payload);
                 default:
                     break;
             }
         };
+        var emailProvider = props.emailProvider, smsProvider = props.smsProvider, whatsappProvider = props.whatsappProvider, slackProvider = props.slackProvider;
+        this.emailProvider = emailProvider;
+        this.smsProvider = smsProvider;
+        this.whatsappProvider = whatsappProvider;
+        this.slackProvider = slackProvider;
     }
     return NotificationService;
 }());
@@ -378,19 +383,18 @@ var NotificationController = /** @class */ (function () {
         var _this = this;
         var notificationService = _a.notificationService;
         this.notify = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var appServices, body, _a, channels, promises, error_1;
+            var body, _a, channels, promises, error_1;
             var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        appServices = req.appServices, body = req.body;
+                        body = req.body;
                         _a = body.channels, channels = _a === void 0 ? [] : _a;
                         promises = [];
                         channels.forEach(function (channel) {
                             promises.push(_this.notificationService.getNotificationChannel({
                                 channel: channel,
                                 payload: body,
-                                appServices: appServices,
                             }));
                         });
                         _b.label = 1;
@@ -492,7 +496,7 @@ var mailgun_js_1 = __importDefault(__webpack_require__(16));
 var json2csv_1 = __webpack_require__(17);
 var common_enums_1 = __webpack_require__(13);
 var htmlMessage_base_1 = __importDefault(__webpack_require__(18));
-var constants_1 = __webpack_require__(71);
+var constants_1 = __webpack_require__(72);
 var MailgunProvider = /** @class */ (function (_super) {
     __extends(MailgunProvider, _super);
     function MailgunProvider(_a) {
@@ -776,7 +780,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 var common_enums_1 = __webpack_require__(13);
 var templates_1 = __webpack_require__(20);
 var dotenv_1 = __importDefault(__webpack_require__(2));
-var types_1 = __webpack_require__(70);
+var types_1 = __webpack_require__(71);
 dotenv_1.default.config();
 /**
  * @TODO: we can have a different template for whatsapp,
@@ -837,7 +841,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SLACK = exports.EMAIL = exports.SMS = void 0;
 exports.SMS = __importStar(__webpack_require__(21));
 exports.EMAIL = __importStar(__webpack_require__(40));
-exports.SLACK = __importStar(__webpack_require__(41));
+exports.SLACK = __importStar(__webpack_require__(69));
 
 
 /***/ }),
@@ -1134,82 +1138,68 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.statementReminder = exports.signupConfirmation = exports.returningOpportunity = exports.request = exports.repaymentInvoice = exports.reminder = exports.referral = exports.reference = exports.referenceAssociation = exports.recollectionPayment = exports.recollection = exports.paymentAudit = exports.passwordReset = exports.overdueNotice = exports.otp = exports.newOpportunity = exports.metricsCsv = exports.sendOffer = exports.guarantorRequest = exports.guarantorNotAccepted = exports.guarantorAccepted = exports.disbursalFailure = exports.earlyRepaymentReminder = exports.earlyRepayment = exports.disqualify = exports.consistentOverdueLoans = exports.confirmGuarantor = exports.associationRequirement = exports.agentInvitation = void 0;
-var agentInvitation_1 = __webpack_require__(42);
+var agentInvitation_1 = __webpack_require__(41);
 Object.defineProperty(exports, "agentInvitation", ({ enumerable: true, get: function () { return __importDefault(agentInvitation_1).default; } }));
-var associationRequirement_1 = __webpack_require__(43);
+var associationRequirement_1 = __webpack_require__(42);
 Object.defineProperty(exports, "associationRequirement", ({ enumerable: true, get: function () { return __importDefault(associationRequirement_1).default; } }));
-var confirmGuarantor_1 = __webpack_require__(44);
+var confirmGuarantor_1 = __webpack_require__(43);
 Object.defineProperty(exports, "confirmGuarantor", ({ enumerable: true, get: function () { return __importDefault(confirmGuarantor_1).default; } }));
-var consistentOverdueLoans_1 = __webpack_require__(45);
+var consistentOverdueLoans_1 = __webpack_require__(44);
 Object.defineProperty(exports, "consistentOverdueLoans", ({ enumerable: true, get: function () { return __importDefault(consistentOverdueLoans_1).default; } }));
-var disqualify_1 = __webpack_require__(46);
+var disqualify_1 = __webpack_require__(45);
 Object.defineProperty(exports, "disqualify", ({ enumerable: true, get: function () { return __importDefault(disqualify_1).default; } }));
-var earlyRepayment_1 = __webpack_require__(47);
+var earlyRepayment_1 = __webpack_require__(46);
 Object.defineProperty(exports, "earlyRepayment", ({ enumerable: true, get: function () { return __importDefault(earlyRepayment_1).default; } }));
-var earlyRepaymentReminder_1 = __webpack_require__(48);
+var earlyRepaymentReminder_1 = __webpack_require__(47);
 Object.defineProperty(exports, "earlyRepaymentReminder", ({ enumerable: true, get: function () { return __importDefault(earlyRepaymentReminder_1).default; } }));
-var disbursalFailure_1 = __webpack_require__(49);
+var disbursalFailure_1 = __webpack_require__(48);
 Object.defineProperty(exports, "disbursalFailure", ({ enumerable: true, get: function () { return __importDefault(disbursalFailure_1).default; } }));
-var guarantorAccepted_1 = __webpack_require__(50);
+var guarantorAccepted_1 = __webpack_require__(49);
 Object.defineProperty(exports, "guarantorAccepted", ({ enumerable: true, get: function () { return __importDefault(guarantorAccepted_1).default; } }));
-var guarantorNotAccepted_1 = __webpack_require__(51);
+var guarantorNotAccepted_1 = __webpack_require__(50);
 Object.defineProperty(exports, "guarantorNotAccepted", ({ enumerable: true, get: function () { return __importDefault(guarantorNotAccepted_1).default; } }));
-var guarantorRequest_1 = __webpack_require__(52);
+var guarantorRequest_1 = __webpack_require__(51);
 Object.defineProperty(exports, "guarantorRequest", ({ enumerable: true, get: function () { return __importDefault(guarantorRequest_1).default; } }));
 var sendOffer_1 = __webpack_require__(32);
 Object.defineProperty(exports, "sendOffer", ({ enumerable: true, get: function () { return __importDefault(sendOffer_1).default; } }));
-var metricsCsv_1 = __webpack_require__(53);
+var metricsCsv_1 = __webpack_require__(52);
 Object.defineProperty(exports, "metricsCsv", ({ enumerable: true, get: function () { return __importDefault(metricsCsv_1).default; } }));
-var newOpportunity_1 = __webpack_require__(54);
+var newOpportunity_1 = __webpack_require__(53);
 Object.defineProperty(exports, "newOpportunity", ({ enumerable: true, get: function () { return __importDefault(newOpportunity_1).default; } }));
-var otp_1 = __webpack_require__(55);
+var otp_1 = __webpack_require__(54);
 Object.defineProperty(exports, "otp", ({ enumerable: true, get: function () { return __importDefault(otp_1).default; } }));
-var overdueNotice_1 = __webpack_require__(56);
+var overdueNotice_1 = __webpack_require__(55);
 Object.defineProperty(exports, "overdueNotice", ({ enumerable: true, get: function () { return __importDefault(overdueNotice_1).default; } }));
-var passwordReset_1 = __webpack_require__(57);
+var passwordReset_1 = __webpack_require__(56);
 Object.defineProperty(exports, "passwordReset", ({ enumerable: true, get: function () { return __importDefault(passwordReset_1).default; } }));
-var paymentAudit_1 = __webpack_require__(58);
+var paymentAudit_1 = __webpack_require__(57);
 Object.defineProperty(exports, "paymentAudit", ({ enumerable: true, get: function () { return __importDefault(paymentAudit_1).default; } }));
-var recollection_1 = __webpack_require__(59);
+var recollection_1 = __webpack_require__(58);
 Object.defineProperty(exports, "recollection", ({ enumerable: true, get: function () { return __importDefault(recollection_1).default; } }));
-var recollectionPayment_1 = __webpack_require__(60);
+var recollectionPayment_1 = __webpack_require__(59);
 Object.defineProperty(exports, "recollectionPayment", ({ enumerable: true, get: function () { return __importDefault(recollectionPayment_1).default; } }));
-var referenceAssociation_1 = __webpack_require__(61);
+var referenceAssociation_1 = __webpack_require__(60);
 Object.defineProperty(exports, "referenceAssociation", ({ enumerable: true, get: function () { return __importDefault(referenceAssociation_1).default; } }));
-var reference_1 = __webpack_require__(62);
+var reference_1 = __webpack_require__(61);
 Object.defineProperty(exports, "reference", ({ enumerable: true, get: function () { return __importDefault(reference_1).default; } }));
-var referral_1 = __webpack_require__(63);
+var referral_1 = __webpack_require__(62);
 Object.defineProperty(exports, "referral", ({ enumerable: true, get: function () { return __importDefault(referral_1).default; } }));
-var reminder_1 = __webpack_require__(64);
+var reminder_1 = __webpack_require__(63);
 Object.defineProperty(exports, "reminder", ({ enumerable: true, get: function () { return __importDefault(reminder_1).default; } }));
-var repaymentInvoice_1 = __webpack_require__(65);
+var repaymentInvoice_1 = __webpack_require__(64);
 Object.defineProperty(exports, "repaymentInvoice", ({ enumerable: true, get: function () { return __importDefault(repaymentInvoice_1).default; } }));
-var request_1 = __webpack_require__(66);
+var request_1 = __webpack_require__(65);
 Object.defineProperty(exports, "request", ({ enumerable: true, get: function () { return __importDefault(request_1).default; } }));
-var returningOpportunity_1 = __webpack_require__(67);
+var returningOpportunity_1 = __webpack_require__(66);
 Object.defineProperty(exports, "returningOpportunity", ({ enumerable: true, get: function () { return __importDefault(returningOpportunity_1).default; } }));
-var signupConfirmation_1 = __webpack_require__(68);
+var signupConfirmation_1 = __webpack_require__(67);
 Object.defineProperty(exports, "signupConfirmation", ({ enumerable: true, get: function () { return __importDefault(signupConfirmation_1).default; } }));
-var statementReminder_1 = __webpack_require__(69);
+var statementReminder_1 = __webpack_require__(68);
 Object.defineProperty(exports, "statementReminder", ({ enumerable: true, get: function () { return __importDefault(statementReminder_1).default; } }));
 
 
 /***/ }),
 /* 41 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.serviceFailure = void 0;
-var serviceFailure_1 = __webpack_require__(80);
-Object.defineProperty(exports, "serviceFailure", ({ enumerable: true, get: function () { return __importDefault(serviceFailure_1).default; } }));
-
-
-/***/ }),
-/* 42 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1228,7 +1218,7 @@ exports.default = agentInvitationTemplate;
 
 
 /***/ }),
-/* 43 */
+/* 42 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1247,7 +1237,7 @@ exports.default = associationRequirement;
 
 
 /***/ }),
-/* 44 */
+/* 43 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1266,7 +1256,7 @@ exports.default = confirmGuarantor;
 
 
 /***/ }),
-/* 45 */
+/* 44 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1285,7 +1275,7 @@ exports.default = consistentOverdueLoans;
 
 
 /***/ }),
-/* 46 */
+/* 45 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1341,7 +1331,7 @@ exports.default = disqualify;
 
 
 /***/ }),
-/* 47 */
+/* 46 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1360,7 +1350,7 @@ exports.default = earlyRepayment;
 
 
 /***/ }),
-/* 48 */
+/* 47 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1379,7 +1369,7 @@ exports.default = earlyRepaymentReminder;
 
 
 /***/ }),
-/* 49 */
+/* 48 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1397,7 +1387,7 @@ exports.default = disbursalFailure;
 
 
 /***/ }),
-/* 50 */
+/* 49 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1415,7 +1405,7 @@ exports.default = guarantorAccepted;
 
 
 /***/ }),
-/* 51 */
+/* 50 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1434,7 +1424,7 @@ exports.default = guarantorNotAccepted;
 
 
 /***/ }),
-/* 52 */
+/* 51 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1453,7 +1443,7 @@ exports.default = guarantorRequest;
 
 
 /***/ }),
-/* 53 */
+/* 52 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1470,7 +1460,7 @@ exports.default = metricsCsv;
 
 
 /***/ }),
-/* 54 */
+/* 53 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1491,7 +1481,7 @@ exports.default = newOpportunity;
 
 
 /***/ }),
-/* 55 */
+/* 54 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1510,7 +1500,7 @@ exports.default = otpTemplate;
 
 
 /***/ }),
-/* 56 */
+/* 55 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1528,7 +1518,7 @@ exports.default = overdueNotice;
 
 
 /***/ }),
-/* 57 */
+/* 56 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1547,7 +1537,7 @@ exports.default = passwordReset;
 
 
 /***/ }),
-/* 58 */
+/* 57 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1565,7 +1555,7 @@ exports.default = paymentAudit;
 
 
 /***/ }),
-/* 59 */
+/* 58 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1584,7 +1574,7 @@ exports.default = recollection;
 
 
 /***/ }),
-/* 60 */
+/* 59 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1603,7 +1593,7 @@ exports.default = recollectionPayment;
 
 
 /***/ }),
-/* 61 */
+/* 60 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1622,7 +1612,7 @@ exports.default = referenceAssociation;
 
 
 /***/ }),
-/* 62 */
+/* 61 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1641,7 +1631,7 @@ exports.default = reference;
 
 
 /***/ }),
-/* 63 */
+/* 62 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1660,7 +1650,7 @@ exports.default = referral;
 
 
 /***/ }),
-/* 64 */
+/* 63 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1683,7 +1673,7 @@ exports.default = reminder;
 
 
 /***/ }),
-/* 65 */
+/* 64 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1704,7 +1694,7 @@ exports.default = repaymentInvoice;
 
 
 /***/ }),
-/* 66 */
+/* 65 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1723,7 +1713,7 @@ exports.default = request;
 
 
 /***/ }),
-/* 67 */
+/* 66 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1742,7 +1732,7 @@ exports.default = returningOpportnity;
 
 
 /***/ }),
-/* 68 */
+/* 67 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1761,7 +1751,7 @@ exports.default = signupConfirmation;
 
 
 /***/ }),
-/* 69 */
+/* 68 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1780,13 +1770,40 @@ exports.default = statementReminder;
 
 
 /***/ }),
+/* 69 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.serviceFailure = void 0;
+var serviceFailure_1 = __webpack_require__(70);
+Object.defineProperty(exports, "serviceFailure", ({ enumerable: true, get: function () { return __importDefault(serviceFailure_1).default; } }));
+
+
+/***/ }),
 /* 70 */
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+var serviceFailure = function (messageProps) {
+    var serviceName = messageProps.serviceName, failedMethod = messageProps.failedMethod, errorMessage = messageProps.errorMessage, errorTitle = messageProps.errorTitle;
+    return " \n    Service: " + serviceName + ",\n    Title: " + errorTitle + "\n    Failed Method: " + failedMethod + ",\n    Error Message: " + errorMessage + ",\n    ";
+};
+exports.default = serviceFailure;
+
+
+/***/ }),
+/* 71 */
 /***/ ((module) => {
 
 module.exports = require("@payhippo/node-service-base/dist/types");;
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -1825,7 +1842,7 @@ exports.paymentAuditFields = [
 
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1885,9 +1902,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 var node_service_base_1 = __webpack_require__(1);
-var axios_1 = __importDefault(__webpack_require__(73));
+var axios_1 = __importDefault(__webpack_require__(74));
 var common_enums_1 = __webpack_require__(13);
-var phoneNumberMessage_base_1 = __importDefault(__webpack_require__(74));
+var phoneNumberMessage_base_1 = __importDefault(__webpack_require__(75));
 var TermiiProvider = /** @class */ (function (_super) {
     __extends(TermiiProvider, _super);
     function TermiiProvider(_a) {
@@ -1952,13 +1969,13 @@ exports.default = TermiiProvider;
 
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ ((module) => {
 
 module.exports = require("axios");;
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -2091,118 +2108,6 @@ exports.default = PhoneNumberBasedMessage;
 
 
 /***/ }),
-/* 75 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-var node_service_base_1 = __webpack_require__(1);
-var axios_1 = __importDefault(__webpack_require__(73));
-var common_enums_1 = __webpack_require__(13);
-var Message_base_1 = __importDefault(__webpack_require__(19));
-var SlackProvider = /** @class */ (function (_super) {
-    __extends(SlackProvider, _super);
-    function SlackProvider(_a) {
-        var env = _a.env;
-        var _this = _super.call(this) || this;
-        _this.teamId = env._SLACK_TEAM_ID;
-        _this.channelId = env._SLACK_CHANNEL_ID;
-        _this.token = env._SLACK_TOKEN;
-        return _this;
-    }
-    SlackProvider.prototype.sendSlackMessage = function (props) {
-        return __awaiter(this, void 0, void 0, function () {
-            var template, data, message, isProduction, error_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        template = props.template, data = props.data;
-                        message = this.getTemplate({ template: template, data: data, format: common_enums_1.Format.SLACK });
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 4, , 5]);
-                        isProduction = this.isProductionEnvironment();
-                        if (!isProduction) return [3 /*break*/, 3];
-                        return [4 /*yield*/, axios_1.default.post("/" + this.teamId + "/" + this.channelId + "/" + this.token, {
-                                text: message,
-                            })];
-                    case 2:
-                        _a.sent();
-                        return [2 /*return*/];
-                    case 3:
-                        node_service_base_1.logger.log("Dev call sending slack template" + template + ", message => " + message);
-                        return [3 /*break*/, 5];
-                    case 4:
-                        error_1 = _a.sent();
-                        if (error_1 instanceof Error) {
-                            node_service_base_1.logger.error(error_1.message);
-                        }
-                        return [3 /*break*/, 5];
-                    case 5: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    return SlackProvider;
-}(Message_base_1.default));
-exports.default = SlackProvider;
-
-
-/***/ }),
 /* 76 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
@@ -2262,10 +2167,122 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-var twilio_1 = __importDefault(__webpack_require__(77));
+var node_service_base_1 = __webpack_require__(1);
+var axios_1 = __importDefault(__webpack_require__(74));
+var common_enums_1 = __webpack_require__(13);
+var Message_base_1 = __importDefault(__webpack_require__(19));
+var SlackProvider = /** @class */ (function (_super) {
+    __extends(SlackProvider, _super);
+    function SlackProvider(_a) {
+        var env = _a.env;
+        var _this = _super.call(this) || this;
+        _this.teamId = env._SLACK_TEAM_ID;
+        _this.channelId = env._SLACK_CHANNEL_ID;
+        _this.token = env._SLACK_TOKEN;
+        return _this;
+    }
+    SlackProvider.prototype.sendSlackMessage = function (props) {
+        return __awaiter(this, void 0, void 0, function () {
+            var template, data, message, isProduction, error_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        template = props.template, data = props.data;
+                        message = this.getTemplate({ template: template, data: data, format: common_enums_1.Format.SLACK });
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 4, , 5]);
+                        isProduction = this.isProductionEnvironment();
+                        if (!isProduction) return [3 /*break*/, 3];
+                        return [4 /*yield*/, axios_1.default.post("/" + this.teamId + "/" + this.channelId + "/" + this.token, {
+                                text: message,
+                            })];
+                    case 2:
+                        _a.sent();
+                        return [2 /*return*/];
+                    case 3:
+                        node_service_base_1.logger.log("Dev call sending slack template" + template + ", message => " + message);
+                        return [3 /*break*/, 5];
+                    case 4:
+                        error_1 = _a.sent();
+                        if (error_1 instanceof Error) {
+                            node_service_base_1.logger.error(error_1.message);
+                        }
+                        return [3 /*break*/, 5];
+                    case 5: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    return SlackProvider;
+}(Message_base_1.default));
+exports.default = SlackProvider;
+
+
+/***/ }),
+/* 77 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+var twilio_1 = __importDefault(__webpack_require__(78));
 var node_service_base_1 = __webpack_require__(1);
 var common_enums_1 = __webpack_require__(13);
-var phoneNumberMessage_base_1 = __importDefault(__webpack_require__(74));
+var phoneNumberMessage_base_1 = __importDefault(__webpack_require__(75));
 var TwilioProvider = /** @class */ (function (_super) {
     __extends(TwilioProvider, _super);
     function TwilioProvider(_a) {
@@ -2364,13 +2381,13 @@ exports.default = TwilioProvider;
 
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ ((module) => {
 
 module.exports = require("twilio");;
 
 /***/ }),
-/* 78 */
+/* 79 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -2414,12 +2431,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-var axios_1 = __importDefault(__webpack_require__(73));
+var axios_1 = __importDefault(__webpack_require__(74));
 var node_service_base_1 = __webpack_require__(1);
 var BitlyProvider = /** @class */ (function () {
-    function BitlyProvider(constructorProps) {
-        var token = constructorProps.token;
-        this.token = token;
+    function BitlyProvider(_a) {
+        var env = _a.env;
+        this.token = env._BITLY_TOKEN;
     }
     BitlyProvider.prototype.shortenUrl = function (url) {
         return __awaiter(this, void 0, void 0, function () {
@@ -2466,23 +2483,10 @@ exports.default = BitlyProvider;
 
 
 /***/ }),
-/* 79 */
+/* 80 */
 /***/ ((module) => {
 
 module.exports = JSON.parse('{"name":"notification-service","version":"1.0.1","description":"Handles payhippo notification","main":"./dist/index.js","types":"./dist/index.d.ts","files":["dist"],"author":"Jude Okafor","license":"ISC","scripts":{"start":"node ./dist/index.js","nodemon":"nodemon","dev":"npm-run-all --parallel nodemon build:dev","dev:debug":"nodemon --inspect src/index.ts","lint":"eslint --fix src/","build":"webpack --env ENVIRONMENT=production --config webpack.config.js --progress","build:dev":"webpack --watch --env ENVIRONMENT=development --config webpack.config.js","test":"mocha -r ts-node/register tests/**/*.test.ts","watch:test":"mocha -r ts-node/register --watch --watch-files src,tests tests/**/*.test.ts","artifactregistry-login":"npx google-artifactregistry-auth"},"devDependencies":{"@types/capitalize":"^2.0.0","@types/currency-formatter":"^1.5.1","@types/express":"4.17.12","@types/json2csv":"^5.0.3","@types/mailgun-js":"^0.22.12","@types/node":"15.9.0","@typescript-eslint/eslint-plugin":"4.26.0","@typescript-eslint/parser":"4.26.0","clean-webpack-plugin":"4.0.0-alpha.0","eslint":"7.27.0","eslint-config-prettier":"8.3.0","eslint-config-standard":"16.0.3","eslint-plugin-import":"2.23.4","eslint-plugin-node":"11.1.0","eslint-plugin-prettier":"3.4.0","eslint-plugin-promise":"5.1.0","moment-timezone-data-webpack-plugin":"1.5.0","prettier":"2.3.0","ts-loader":"9.2.3","ts-node-dev":"1.1.6","typescript":"4.3.2","webpack":"5.38.1","webpack-cli":"4.7.2","webpack-node-externals":"3.0.0"},"dependencies":{"@payhippo/node-service-base":"^1.2.13","@sendgrid/mail":"^7.6.1","awilix":"^6.1.0","capitalize":"^2.0.4","currency-formatter":"^1.5.9","dotenv":"8.2.0","express":"4.17.1","json2csv":"^5.0.6","mailgun-js":"^0.22.0","nodemon":"^2.0.15","npm-run-all":"^4.1.5","twilio":"^3.74.0"}}');
-
-/***/ }),
-/* 80 */
-/***/ ((__unused_webpack_module, exports) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-var serviceFailure = function (messageProps) {
-    var serviceName = messageProps.serviceName, failedMethod = messageProps.failedMethod, errorMessage = messageProps.errorMessage, errorTitle = messageProps.errorTitle;
-    return " \n    Service: " + serviceName + ",\n    Title: " + errorTitle + "\n    Failed Method: " + failedMethod + ",\n    Error Message: " + errorMessage + ",\n    ";
-};
-exports.default = serviceFailure;
-
 
 /***/ })
 /******/ 	]);

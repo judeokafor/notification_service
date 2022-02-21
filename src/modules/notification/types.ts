@@ -10,6 +10,13 @@ import IWhatsappProvider, {
 	IWhatsappNotificationPayload,
 } from '../../interfaces/whatsapp/IWhatsappProvider.interface';
 
+export type NotificationServiceConstructor = {
+	emailProvider: IEmailProvider;
+	smsProvider: ISmsProvider;
+	whatsappProvider: IWhatsappProvider;
+	slackProvider: ISlackProvider;
+};
+
 export type NotificationPayload =
 	| IEmailNotificationPayload
 	| ISmsNotificationPayload
@@ -19,13 +26,6 @@ export type NotificationPayload =
 export type GetNotificationChannelProps = {
 	channel: NOTIFICATION_CHANNEL;
 	payload: NotificationPayload;
-
-	appServices: {
-		emailProvider: IEmailProvider;
-		slackProvider: ISlackProvider;
-		smsProvider: ISmsProvider;
-		whatsappProvider: IWhatsappProvider;
-	};
 };
 
 export type GetNotificationChannel = (
