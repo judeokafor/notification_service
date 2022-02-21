@@ -164,7 +164,7 @@ export default class MailgunProvider extends HtmlBasedMessage implements IEmailP
 		return { cc, recipient };
 	}
 
-	async getSendOptions(options: GetSendOptionsProps): Promise<MailgunOptions> {
+	private async getSendOptions(options: GetSendOptionsProps): Promise<MailgunOptions> {
 		const {
 			to,
 			accountManagerId,

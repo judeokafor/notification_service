@@ -1,3 +1,4 @@
+import { logger } from '@payhippo/node-service-base';
 import express, { Request, Response } from 'express';
 
 import container from '../container.awilix';
@@ -13,7 +14,6 @@ export enum PubSubRouterType {
 const notificationController: INotificationController = container.resolve('notificationController');
 const pubSubRouter = async (req: Request, res: Response) => {
 	const { type } = req.body;
-	const { logger } = req.appServices;
 
 	logger.log('Calling pubSubRouter body ==>', type);
 

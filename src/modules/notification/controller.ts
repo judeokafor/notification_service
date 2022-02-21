@@ -35,9 +35,7 @@ export default class NotificationController implements INotificationController {
 		});
 
 		try {
-			logger.log('entering this block');
 			await Promise.all(promises);
-
 			return res.sendStatus(200);
 		} catch (error) {
 			logger.error(error);

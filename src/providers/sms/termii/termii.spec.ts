@@ -6,7 +6,6 @@ import TermiiProvider from '.';
 import { mock } from 'jest-mock-extended';
 import { IUrlShortnerProvider } from '../../../interfaces/common.interface';
 
-import dotenv from 'dotenv';
 import { NOTIFICATION_CHANNEL, TEMPLATE_TYPE } from '../../../interfaces/common.enums';
 
 describe('Test Termii Provider', () => {
