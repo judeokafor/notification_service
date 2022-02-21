@@ -22,7 +22,7 @@ export default class TermiiProvider extends PhoneNumberMessage implements ISmsPr
 		const { to, message, useDnd } = props;
 
 		return {
-			to,
+			to: this.formatPhoneNumber(to),
 			from: useDnd ? 'N-Alert' : 'Payhippo',
 			sms: message,
 			type: 'plain',

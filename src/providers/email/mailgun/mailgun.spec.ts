@@ -1,7 +1,5 @@
 import MailgunProvider from '.';
 
-// jest.mock('.');
-
 describe('Test Mailgun Provider', () => {
 	const mailgunProvider = new MailgunProvider({
 		env: {
@@ -160,7 +158,7 @@ describe('Test Mailgun Provider', () => {
 				includeCC: true,
 			};
 
-			const sendOptions = await mailgunProvider.getSendOptions(sendOptonsProps);
+			const sendOptions = await mailgunProviderProto.getSendOptions(sendOptonsProps);
 
 			expect(sendOptions).toHaveProperty('cc');
 			expect(sendOptions.cc.length).toBeGreaterThanOrEqual(1);
