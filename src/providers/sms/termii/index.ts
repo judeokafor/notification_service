@@ -7,7 +7,7 @@ import ISmsProvider, {
 } from '../../../interfaces/sms/ISmsProvider.interface';
 
 import PhoneNumberMessage from '../../phoneNumberMessage.base';
-import { GetSendOptions, TermiiProviderConstructor } from './types';
+import { GetSendOptions, TermiiProviderConstructor, TermiiSendOptions } from './types';
 
 export default class TermiiProvider extends PhoneNumberMessage implements ISmsProvider {
 	private apiKey: string;
@@ -18,7 +18,7 @@ export default class TermiiProvider extends PhoneNumberMessage implements ISmsPr
 		this.apiKey = env._TERMI_API_KEY;
 	}
 
-	private getSendOptions(props: GetSendOptions) {
+	private getSendOptions(props: GetSendOptions): TermiiSendOptions {
 		const { to, message, useDnd } = props;
 
 		return {
@@ -27,8 +27,21 @@ export default class TermiiProvider extends PhoneNumberMessage implements ISmsPr
 			sms: message,
 			type: 'plain',
 			channel: useDnd ? 'dnd' : 'generic',
-			api_key: this.apiKey,
+			apiKey: this.apiKey,
 		};
+	}
+
+	public async sendToTermi(data: TermiiSendOptions): Promise<void> {
+		try {
+			await axios.post(`${process.env._TERMII_BASE_URL}/sms/send`, {
+				...data,
+				api_key: data.apiKey,
+			});
+		} catch (error) {
+			if (error instanceof Error) {
+				logger.error('sendToTermi', error.message);
+			}
+		}
 	}
 
 	async sendSms(props: ISmsNotificationPayload): Promise<void> {
@@ -52,13 +65,15 @@ export default class TermiiProvider extends PhoneNumberMessage implements ISmsPr
 					useDnd,
 				});
 
-				await axios.post(`${process.env._TERMII_BASE_URL}/sms/send`, sendData);
+				await this.sendToTermi(sendData);
 				return;
 			}
 
 			logger.log(`Dev call sending sms to ${receipient}`);
 		} catch (error) {
-			logger.error(error);
+			if (error instanceof Error) {
+				logger.error('sendSms', error.message);
+			}
 		}
 	}
 }

@@ -12,3 +12,12 @@ export type TermiiProviderConstructor = {
 	};
 	urlShortnerProvider: IUrlShortnerProvider;
 };
+
+export type TermiiSendOptions = {
+	to: string;
+	from: string;
+	sms: string;
+	type: string;
+	channel: string;
+	apiKey: string;
+};
