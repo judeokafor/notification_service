@@ -44,5 +44,5 @@ export type GetSendOptionsProps = GenerateEmailRecipientProp & {
 	subject: string;
 	html: string;
 	data: Record<string, unknown>;
-	attachmentType: AttachmentType | undefined;
+	attachmentType?: AttachmentType | undefined;
 };

@@ -42,7 +42,7 @@ export default class MailgunProvider extends HtmlBasedMessage implements IEmailP
 		});
 	}
 
-	private showEnvironment() {
+	private showEnvironment(): string {
 		const currentEnvironmrnt = process.env._APP_ENV || '';
 		return this.isProductionEnvironment() ? '' : `-${currentEnvironmrnt.toUpperCase()}`;
 	}
@@ -82,7 +82,7 @@ export default class MailgunProvider extends HtmlBasedMessage implements IEmailP
 		return attachment;
 	}
 
-	private async generateAccountMangerEmail(accountManagerId: string) {
+	private async generateAccountMangerEmail(accountManagerId?: string): Promise<string> {
 		let email = 'hello@payhippo.ng';
 
 		try {
@@ -164,7 +164,7 @@ export default class MailgunProvider extends HtmlBasedMessage implements IEmailP
 		return { cc, recipient };
 	}
 
-	private async getSendOptions(options: GetSendOptionsProps): Promise<MailgunOptions> {
+	async getSendOptions(options: GetSendOptionsProps): Promise<MailgunOptions> {
 		const {
 			to,
 			accountManagerId,
@@ -177,10 +177,14 @@ export default class MailgunProvider extends HtmlBasedMessage implements IEmailP
 			attachmentType,
 		} = options;
 
-		const attachment = this.getAttachment({
-			data,
-			attachmentType,
-		});
+		let attachment;
+
+		if (attachmentType) {
+			attachment = this.getAttachment({
+				data,
+				attachmentType,
+			});
+		}
 
 		let recipient = '';
 		let cc = [] as string[];
