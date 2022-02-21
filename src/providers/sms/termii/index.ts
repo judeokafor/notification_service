@@ -12,10 +12,10 @@ import { GetSendOptions, TermiiProviderConstructor } from './types';
 export default class TermiiProvider extends PhoneNumberMessage implements ISmsProvider {
 	private apiKey: string;
 
-	constructor({ apiKey }: TermiiProviderConstructor) {
-		super();
+	constructor({ env, urlShortnerProvider }: TermiiProviderConstructor) {
+		super({ urlShortnerProvider });
 
-		this.apiKey = apiKey;
+		this.apiKey = env._TERMI_API_KEY;
 	}
 
 	private getSendOptions(props: GetSendOptions) {

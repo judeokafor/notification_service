@@ -1,9 +1,3 @@
-import welcomeEmail from './welcome-email';
-
-export default {
-	welcomeEmail,
-};
-
 export { default as agentInvitation } from './agentInvitation';
 export { default as associationRequirement } from './associationRequirement';
 export { default as confirmGuarantor } from './confirmGuarantor';

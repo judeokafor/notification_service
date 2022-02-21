@@ -14,14 +14,12 @@ export default class SlackProvider extends Message implements ISlackProvider {
 	private channelId: string;
 	private token: string;
 
-	constructor(constructorProps: SlackProviderConstructor) {
+	constructor({ env }: SlackProviderConstructor) {
 		super();
 
-		const { teamId, channelId, token } = constructorProps;
-
-		this.teamId = teamId;
-		this.channelId = channelId;
-		this.token = token;
+		this.teamId = env._SLACK_TEAM_ID;
+		this.channelId = env._SLACK_CHANNEL_ID;
+		this.token = env._SLACK_TOKEN;
 	}
 
 	public async sendSlackMessage(props: ISlackNotificationPayload): Promise<void> {

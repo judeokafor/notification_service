@@ -1,17 +1,15 @@
 import { logger } from '@payhippo/node-service-base';
+
 import { IPhoneNumberMessage, IUrlShortnerProvider } from '../interfaces/common.interface';
-import { abbreviateName } from '../utils';
+
 import Message from './Message.base';
-import BitlyProvider from './urlShortner/bitly';
 
 abstract class PhoneNumberBasedMessage extends Message implements IPhoneNumberMessage {
 	private urlShortnerProvider: IUrlShortnerProvider;
-	constructor() {
+	constructor({ urlShortnerProvider }: { urlShortnerProvider: IUrlShortnerProvider }) {
 		super();
 
-		this.urlShortnerProvider = new BitlyProvider({
-			token: process.env._BITLY_TOKEN || '',
-		});
+		this.urlShortnerProvider = urlShortnerProvider;
 	}
 
 	canSendSms(to: string): boolean {
@@ -43,13 +41,35 @@ abstract class PhoneNumberBasedMessage extends Message implements IPhoneNumberMe
 		return '';
 	}
 
+	abbreviateName = (businessOwnerName: string): string => {
+		let abbreviatedName = '';
+
+		if (businessOwnerName) {
+			// convert name to array at every space between names
+			const arrayOfNames = businessOwnerName.split(' ');
+
+			arrayOfNames.forEach((name, i) => {
+				// if the name is not the last name add the first letter to the abbrevated name initails
+				if (i < arrayOfNames.length - 1) {
+					abbreviatedName = abbreviatedName + `${name.charAt(0)}.`;
+				}
+			});
+
+			// make abbreviatedName the initials and the last name/item in the name array
+			// ie. if name is 'Jude Okafor' abbreviatedName would be J. Okafor
+			abbreviatedName = abbreviatedName + ` ${arrayOfNames[arrayOfNames.length - 1]}`;
+		}
+
+		return abbreviatedName;
+	};
+
 	async modifyData(data: Record<string, any>): Promise<Record<string, unknown>> {
 		if (data.url) {
 			data.url = await this.urlShortnerProvider.shortenUrl(data.url);
 		}
 
 		if (data.businessOwnerName) {
-			data.businessOwnerName = abbreviateName(data.businessOwnerName);
+			data.businessOwnerName = this.abbreviateName(data.businessOwnerName);
 		}
 
 		return data;

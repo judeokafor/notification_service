@@ -27,11 +27,11 @@ export default class MailgunProvider extends HtmlBasedMessage implements IEmailP
 	private domain: string;
 	private mailgun: Mailgun.Mailgun;
 
-	constructor({ apiKey, domain }: MailgunProviderConstructor) {
+	constructor({ env }: MailgunProviderConstructor) {
 		super();
 
-		this.apiKey = apiKey;
-		this.domain = domain;
+		this.apiKey = env._MAILGUN_API_KEY;
+		this.domain = env._MAILGUN_DOMAIN;
 
 		this.mailgun = new Mailgun({
 			apiKey: this.apiKey,

@@ -21,12 +21,14 @@ export default class TwilioProvider
 	private twiloClient: twilio.Twilio;
 	private accountSid: string;
 	private authToken: string;
+	private payhippoWhatsappNumber: string;
 
-	constructor({ accountSid, authToken }: TwilioProviderConstructor) {
-		super();
+	constructor({ urlShortnerProvider, env }: TwilioProviderConstructor) {
+		super({ urlShortnerProvider });
 
-		this.accountSid = accountSid;
-		this.authToken = authToken;
+		this.accountSid = env._TWILLO_ACCOUNT_SID;
+		this.authToken = env._TWILLO_ACCOUNT_AUTH_TOKEN;
+		this.payhippoWhatsappNumber = env._PAYHIPPO_WHATSAPP_NUMBER;
 
 		this.twiloClient = twilio(this.accountSid, this.authToken, {
 			lazyLoading: true,
@@ -53,7 +55,7 @@ export default class TwilioProvider
 					body: message,
 					from: from
 						? this.getWhatsappNumber(this.formatPhoneNumber(from))
-						: this.getWhatsappNumber(process.env._PAYHIPPO_WHATSAPP_NUMBER || ''),
+						: this.getWhatsappNumber(this.payhippoWhatsappNumber),
 					to: this.getWhatsappNumber(this.formatPhoneNumber(to)),
 				});
 

@@ -1,5 +1,7 @@
 export type SlackProviderConstructor = {
-	teamId: string;
-	channelId: string;
-	token: string;
+	env: {
+		_SLACK_TEAM_ID: string;
+		_SLACK_CHANNEL_ID: string;
+		_SLACK_TOKEN: string;
+	};
 };

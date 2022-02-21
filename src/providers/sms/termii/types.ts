@@ -1,3 +1,5 @@
+import { IUrlShortnerProvider } from '../../../interfaces/common.interface';
+
 export type GetSendOptions = {
 	to: string;
 	message: string;
@@ -5,5 +7,8 @@ export type GetSendOptions = {
 };
 
 export type TermiiProviderConstructor = {
-	apiKey: string;
+	env: {
+		_TERMI_API_KEY: string;
+	};
+	urlShortnerProvider: IUrlShortnerProvider;
 };

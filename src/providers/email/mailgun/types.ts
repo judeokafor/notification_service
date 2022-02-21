@@ -26,7 +26,12 @@ export type MailgunOptions = {
 	attachment?: Attachment | undefined;
 };
 
-export type MailgunProviderConstructor = { apiKey: string; domain: string };
+export type MailgunProviderConstructor = {
+	env: {
+		_MAILGUN_API_KEY: string;
+		_MAILGUN_DOMAIN: string;
+	};
+};
 
 export type EmailRecipients = { cc: string[]; recipient: string };
 

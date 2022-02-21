@@ -1,7 +1,7 @@
 import { Format } from '../interfaces/common.enums';
 import { IBaseMessage } from '../interfaces/common.interface';
 import { GetTemplateProps } from '../interfaces/common.types';
-import { SMS, EMAIL } from '../templates';
+import { SMS, EMAIL, SLACK } from '../templates';
 
 import dotenv from 'dotenv';
 import { Environment } from '@payhippo/node-service-base/dist/types';
@@ -22,7 +22,7 @@ const templates: Record<Format, Record<string, (data: any) => string>> = {
 	},
 
 	[Format.SLACK]: {
-		disbursalFailure: EMAIL.disbursalFailure,
+		serviceFailure: SLACK.serviceFailure,
 	},
 };
 
