@@ -1,13 +1,18 @@
 import { formatCurrency } from '../../utils';
-import { OpportunityType } from '../email/sendOffer';
 
 const clientAppUrl = process.env._CLIENT_APP_URL || '';
+
+export enum OpportunityType {
+	RETRUNING = 'RETURNING',
+	NEW = 'NEW',
+}
 
 type Offer = {
 	businessOwnerName: string;
 	loanAmount: string;
 	opportunityType: OpportunityType;
 };
+
 const message = (messageProps: Offer): string => {
 	const { businessOwnerName, loanAmount, opportunityType } = messageProps;
 	return `Hi ${businessOwnerName},your next Payhippo loan offer is ${formatCurrency(

@@ -9,12 +9,19 @@ export enum NOTIFICATION_CHANNEL {
 
 export enum TEMPLATE_TYPE {
 	WELCOME_EMAIL = 'user_created',
+	CONSISTENT_LOAN = 'consistentLoan',
+	EARLY_REPAYMENT_REMINDER = 'earlyRepaymentReminder',
+	DISBURSAL_FAILURE = 'disbursalFailure',
+	GUARANTOR = 'guarantor',
+	INVITE_CUSTOMER = 'inviteCustomer',
+	REMINDER = 'reminder',
+	OFFER = 'offer',
+	OTP = 'otp',
+	REPAYMENT_INVOICE = 'repaymentInvoice',
 }
 
 export enum Format {
-	HTML = 'HTML',
 	SMS = 'SMS', // sms same as whatsapp
-	SLACK = 'SLACK',
 }
 
 export enum AttachmentType {

@@ -15,6 +15,7 @@ abstract class PhoneNumberBasedMessage extends Message implements IPhoneNumberMe
 	canSendSms(to: string): boolean {
 		let isValid = true;
 
+		// check phone number valid length
 		if (!to || to.trim().length < 11) {
 			logger.error(
 				`phone number "${to}" cannot be empty and must be at least 11 characters!`
@@ -22,15 +23,19 @@ abstract class PhoneNumberBasedMessage extends Message implements IPhoneNumberMe
 			isValid = false;
 		}
 
+		// @TODO: put support for country code validation check
+
 		return isValid;
 	}
 
 	formatPhoneNumber(phoneNumber: string): string {
 		if (phoneNumber) {
+			// strips leading zero and replaces with apprioriate country code.
 			if (phoneNumber.startsWith('0')) {
 				return `+234${phoneNumber.slice(1)}`;
 			}
 
+			// add + to 234
 			if (phoneNumber.startsWith('234')) {
 				return `+${phoneNumber}`;
 			}
@@ -64,10 +69,12 @@ abstract class PhoneNumberBasedMessage extends Message implements IPhoneNumberMe
 	};
 
 	async modifyData(data: Record<string, any>): Promise<Record<string, unknown>> {
+		// shorten url if one exists
 		if (data.url) {
 			data.url = await this.urlShortnerProvider.shortenUrl(data.url);
 		}
 
+		// abbrievates businessOwnerName is one exist
 		if (data.businessOwnerName) {
 			data.businessOwnerName = this.abbreviateName(data.businessOwnerName);
 		}
