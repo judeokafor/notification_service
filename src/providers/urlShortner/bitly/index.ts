@@ -12,10 +12,14 @@ export default class BitlyProvider implements IUrlShortnerProvider {
 		this.token = env._BITLY_TOKEN;
 	}
 
+	private isProduction(): boolean {
+		return process.env._APP_ENV === 'production';
+	}
+
 	public async shortenUrl(url: string): Promise<string> {
 		let shortenUrl = url;
 
-		const isProduction = process.env._APP_ENV === 'production';
+		const isProduction = this.isProduction();
 
 		if (!isProduction) {
 			return shortenUrl;
