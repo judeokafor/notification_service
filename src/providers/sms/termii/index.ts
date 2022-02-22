@@ -31,7 +31,7 @@ export default class TermiiProvider extends PhoneNumberMessage implements ISmsPr
 		};
 	}
 
-	public async sendToTermi(data: TermiiSendOptions): Promise<void> {
+	private async sendToTermi(data: TermiiSendOptions): Promise<void> {
 		try {
 			await axios.post(`${process.env._TERMII_BASE_URL}/sms/send`, {
 				...data,
