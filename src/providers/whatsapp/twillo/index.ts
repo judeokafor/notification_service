@@ -36,7 +36,10 @@ export default class TwilioProvider
 	}
 
 	private getWhatsappNumber(number: string) {
-		return `whatsapp:${number}`;
+		if (number) {
+			return `whatsapp:${number}`;
+		}
+		return '';
 	}
 
 	public async sendWhatsapp(props: IWhatsappNotificationPayload): Promise<void> {

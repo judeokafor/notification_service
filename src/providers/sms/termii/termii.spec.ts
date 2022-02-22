@@ -156,6 +156,9 @@ describe('Test Termii Provider', () => {
 				sendToTermiSpy,
 			].forEach(spyMethod => {
 				expect(spyMethod).toHaveBeenCalled();
+
+				spyMethod.mockReset();
+				spyMethod.mockRestore();
 			});
 		});
 	});
