@@ -1,6 +1,6 @@
 # Use the official lightweight Node.js 12 image.
 # https://hub.docker.com/_/node
-FROM node:alpine
+FROM node:16-alpine3.11
 
 # Create and change to the app directory.
 WORKDIR /usr/src/app
