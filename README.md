@@ -1,4 +1,4 @@
-# {ADD SERVICE NAME HERE} #
+# {NOTIFICATION SERRVICE} #
 
 **{Add short overview description of service here}**
 
