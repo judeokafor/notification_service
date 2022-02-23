@@ -3,6 +3,11 @@
 
 import Analytics from 'analytics-node';
 import * as admin from 'firebase-admin';
+import { IUrlShortnerProvider } from '../../src/interfaces/common.interface';
+import IEmailProvider from '../../src/interfaces/email/IEmailProvder.interface';
+import ISlackProvider from '../../src/interfaces/slack/ISlackProvider.interface';
+import ISmsProvider from '../../src/interfaces/sms/ISmsProvider.interface';
+import IWhatsappProvider from '../../src/interfaces/whatsapp/IWhatsappProvider.interface';
 
 type PublishMessagePayload = {
 	data: any;
@@ -11,33 +16,31 @@ type PublishMessagePayload = {
 
 type Logger = Console | any;
 
-/**
- * Example Secrets Pattern
- * {
-	credit_registry?: {
-		email: string;
-		password: string;
-		subscriber_id: string;
-		test_bvn: string;
+type NotificationServiceSecret = {
+	mailgun?: {
+		apiKey: string;
+		domain: string;
 	};
-	gmail_auth?: {
-		email: string;
-		password: string;
+
+	termii?: {
+		apiKey: string;
 	};
-	verified_ng?: {
-		bank_verify_api_key: string;
-		bvn_simple_api_key: string;
-		cac_api_key: string;
-		frsc_api_key: string;
-		nin_api_key: string;
-		passport_api_key: string;
-		tin_api_key: string;
-		vin_api_key: string;
-		user_id: string;
+
+	slack?: {
+		teamId: string;
+		channelId: string;
+		token: string;
 	};
-}
- */
-type SecretsCopy = any;
+
+	twillo?: {
+		accountSid: string;
+		authToken: string;
+	};
+
+	bitly?: {
+		token: string;
+	};
+};
 
 declare global {
 	namespace Express {
@@ -48,12 +51,20 @@ declare global {
 					firestore: admin.firestore.Firestore;
 					getTimestamp: () => admin.firestore.Timestamp;
 				};
+
 				logger: Logger;
+
 				pubSub: {
 					publishMessage: (payload: PublishMessagePayload) => Promise<string>;
 				};
+
+				emailProvider: IEmailProvider;
+				smsProvider: ISmsProvider;
+				whatsappProvider: IWhatsappProvider;
+				slackProvider: ISlackProvider;
+				urlShortnerProvider: IUrlShortnerProvider;
 			};
-			appSecrets: SecretsCopy;
+			appSecrets: NotificationServiceSecret;
 		}
 	}
 }

@@ -45,6 +45,7 @@ typings/
 
 # Optional npm cache directory
 .npm
+.npmrc
 
 # Optional eslint cache
 .eslintcache
@@ -94,6 +95,7 @@ typings/
 # dist folder
 /dist
 /build
+/dist
 
 # misc
 cors.json
