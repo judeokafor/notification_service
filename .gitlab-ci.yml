@@ -1,10 +1,14 @@
 variables:
-  SERVICE_NAME: node-service-template
+  SERVICE_NAME: notification-service
   SERVICE_ACCOUNT: "938043618393-compute@developer.gserviceaccount.com"
   SERVICE_ACCOUNT_STAGING: "610914703543-compute@developer.gserviceaccount.com"
+  TEST_COMMAND: "echo"
+  DEV_NAMESPACE: notification-svc
+  STAGING_NAMESPACE: notification-svc-staging
+  PROD_NAMESPACE: notification-svc
   ALLOW_UNAUTHENTICATED: "true"
   ARTIFACTS: "true"
 include:
   - project: 'infrastructure/ci-template'
-    ref: 'main-v1'
+    ref: 'main'
     file: '.gcp-templates.yml'
