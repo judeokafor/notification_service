@@ -94,7 +94,7 @@ typings/
 
 # dist folder
 /build
-/dists
+/dist
 
 # misc
 cors.json
