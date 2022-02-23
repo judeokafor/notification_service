@@ -11,9 +11,6 @@ const container = createContainer({
 
 container.register({
 	env: asValue(process.env),
-});
-
-container.register({
 	notificationController: asClass(NotificationController),
 	notificationService: asClass(NotificationService),
 	whatsappProvider: asClass(TwilioProvider),
