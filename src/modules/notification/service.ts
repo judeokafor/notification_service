@@ -20,7 +20,7 @@ export default class NotificationService {
 
 		switch (channel) {
 			case NOTIFICATION_CHANNEL.WHATSAPP:
-				logger.log('calling whatsapp provider...');
+				logger.log('calling whatsapp provider');
 				return this.whatsappProvider.sendWhatsapp(payload as IWhatsappNotificationPayload);
 
 			default:
