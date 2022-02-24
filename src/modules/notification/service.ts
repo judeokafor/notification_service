@@ -1,3 +1,4 @@
+import { logger } from '@payhippo/node-service-base';
 import { NOTIFICATION_CHANNEL } from '../../interfaces/common.enums';
 
 import IWhatsappProvider, {
@@ -19,6 +20,7 @@ export default class NotificationService {
 
 		switch (channel) {
 			case NOTIFICATION_CHANNEL.WHATSAPP:
+				logger.log('calling whatsapp provider...');
 				return this.whatsappProvider.sendWhatsapp(payload as IWhatsappNotificationPayload);
 
 			default:
