@@ -100,7 +100,7 @@ try {
 }
 ```
 
-## Importpant Important
+## Important
 
 -   You will need to reauthenticate with `npm run artifactregistry-login .npmrc` whenever you want to pull the latest version of `@payhippo/node-service-base`.
 
@@ -109,10 +109,78 @@ try {
 
 -   Also ensure your data in the publisher has a type in its object:
 
-````{
+```{
   messageId: '123',
   data: {
     type: 'UPDATE_BANK_STATEMENT',
   }
-}```
-````
+}
+```
+
+### Payload Requests per type
+
+-   _EMAIL NOTIFICATION_
+
+```
+{
+    "type": "SEND_NOTIFICATION",
+    "data": {
+        "firstName": "Jude Okafor"
+    },
+    "channels": [ "EMAIL"],
+    "template": "welcome",
+    "title": "Welcome to payhippo braa",
+    "to": "okaforjudechukwuebuka@gmail.com",
+    "meta": {
+        accountManagerId?: "account manager's id";
+    	partnerEmail?: string;
+    	includeCC?: boolean; // defaults to false
+    	noReply?: boolean; // defaults to false
+    	attachmentType?: AttachmentType; // PAYMENT_AUDIT or METRICS_CSV,
+    }
+}
+```
+
+-   _SMS NOTIFICATION_
+
+```
+{
+    "type": "SEND_NOTIFICATION",
+    "data": {
+        "firstName": "Jude Okafor"
+    },
+    "channels": [ "SMS"],
+    "template": "disbursalFailure",
+    "to": "07065383765",
+    "meta": {
+    	useDnd?: boolean; // defaults to false
+    }
+}
+```
+
+-   _WHATSAPP NOTIFICATION_
+
+```
+{
+    "type": "SEND_NOTIFICATION",
+    "data": {
+        "firstName": "Jude Okafor"
+    },
+    "channels": [ "WHATSAPP"],
+    "template": "disbursalFailure",
+    "to": "07065383765",
+}
+```
+
+-   _SLACK NOTIFICATION_
+
+```
+{
+    "type": "SEND_NOTIFICATION",
+    "data": {
+        "firstName": "Jude Okafor"
+    },
+    "channels": [ "SLACK"],
+    "template": "disbursalFailure",
+}
+```
