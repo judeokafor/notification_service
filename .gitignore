@@ -93,6 +93,7 @@ typings/
 .firebase
 
 # dist folder
+/dist
 /build
 /dist
 
@@ -100,5 +101,7 @@ typings/
 cors.json
 /exec -l
 .DS_store
-/config/**
+/config
+
+.npmrc
 package-lock.json
