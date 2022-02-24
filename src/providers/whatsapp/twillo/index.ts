@@ -45,9 +45,6 @@ export default class TwilioProvider
 	public async sendWhatsapp(props: IWhatsappNotificationPayload): Promise<void> {
 		const { to, data, from, template } = props;
 		try {
-			// const isProduction = this.isProductionEnvironment();
-
-			// if (isProduction) {
 			const message = this.getTemplate({
 				template,
 				data,
@@ -62,10 +59,7 @@ export default class TwilioProvider
 				to: this.getWhatsappNumber(this.formatPhoneNumber(to)),
 			});
 
-			// 	return;
-			// }
-
-			logger.log(`Dev call sending whatsapp to ${to}`);
+			logger.log(`sending whatsapp to ${to}`);
 		} catch (error) {
 			logger.error(error);
 		}

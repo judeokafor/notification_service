@@ -29,6 +29,11 @@ abstract class PhoneNumberBasedMessage extends Message implements IPhoneNumberMe
 	}
 
 	formatPhoneNumber(phoneNumber: string): string {
+		// return default number on dev
+		if (!this.isProductionEnvironment()) {
+			return process.env._DEV_TEST_PHONE_NUMBER || '';
+		}
+
 		if (phoneNumber) {
 			// strips leading zero and replaces with apprioriate country code.
 			if (phoneNumber.startsWith('0')) {
