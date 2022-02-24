@@ -51,7 +51,9 @@ export default class TwilioProvider
 				format: Format.SMS,
 			});
 
-			await this.twiloClient.messages.create({
+			logger.log('getting template message', message);
+
+			const twilloResponse = await this.twiloClient.messages.create({
 				body: message,
 				from: from
 					? this.getWhatsappNumber(this.formatPhoneNumber(from))
@@ -59,7 +61,7 @@ export default class TwilioProvider
 				to: this.getWhatsappNumber(this.formatPhoneNumber(to)),
 			});
 
-			logger.log(`sending whatsapp to ${to}`);
+			logger.log(`sending whatsapp to ${to}`, twilloResponse.status);
 		} catch (error) {
 			logger.error(error);
 		}
