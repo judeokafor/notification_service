@@ -45,25 +45,25 @@ export default class TwilioProvider
 	public async sendWhatsapp(props: IWhatsappNotificationPayload): Promise<void> {
 		const { to, data, from, template } = props;
 		try {
-			const isProduction = this.isProductionEnvironment();
+			// const isProduction = this.isProductionEnvironment();
 
-			if (isProduction) {
-				const message = this.getTemplate({
-					template,
-					data,
-					format: Format.SMS,
-				});
+			// if (isProduction) {
+			const message = this.getTemplate({
+				template,
+				data,
+				format: Format.SMS,
+			});
 
-				await this.twiloClient.messages.create({
-					body: message,
-					from: from
-						? this.getWhatsappNumber(this.formatPhoneNumber(from))
-						: this.getWhatsappNumber(this.payhippoWhatsappNumber),
-					to: this.getWhatsappNumber(this.formatPhoneNumber(to)),
-				});
+			await this.twiloClient.messages.create({
+				body: message,
+				from: from
+					? this.getWhatsappNumber(this.formatPhoneNumber(from))
+					: this.getWhatsappNumber(this.payhippoWhatsappNumber),
+				to: this.getWhatsappNumber(this.formatPhoneNumber(to)),
+			});
 
-				return;
-			}
+			// 	return;
+			// }
 
 			logger.log(`Dev call sending whatsapp to ${to}`);
 		} catch (error) {
