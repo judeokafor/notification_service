@@ -2,11 +2,7 @@ import moment from 'moment';
 import baseTemplate from './base';
 
 import { toTitleCase, formatCurrency } from '../../utils';
-
-export enum OpportunityType {
-	NEW = 'NEW',
-	RETURNING = 'RETURNING',
-}
+import { OpportunityType } from '../../interfaces/common.enums';
 
 type SendOffer = {
 	addStatementFee: boolean;

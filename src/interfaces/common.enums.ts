@@ -29,3 +29,8 @@ export enum AttachmentType {
 	PAYMENT_AUDIT = 'PAYMENT_AUDIT',
 	METRICS_CSV = 'METRICS_CSV',
 }
+
+export enum OpportunityType {
+	RETURNING = 'RETURNING',
+	NEW = 'NEW',
+}

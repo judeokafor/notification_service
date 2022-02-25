@@ -1,11 +1,7 @@
+import { OpportunityType } from '../../interfaces/common.enums';
 import { formatCurrency } from '../../utils';
 
 const clientAppUrl = process.env._CLIENT_APP_URL || '';
-
-export enum OpportunityType {
-	RETRUNING = 'RETURNING',
-	NEW = 'NEW',
-}
 
 type Offer = {
 	businessOwnerName: string;
