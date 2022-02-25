@@ -72,7 +72,7 @@ describe('Test Termii Provider', () => {
 				})
 				.replyOnce(200);
 
-			await termiiProvider.sendToTermi({
+			await termiiProviderProto.sendToTermi({
 				to: '07065383765',
 				from: 'Payhippo',
 				sms: 'Hi there, testing send sms',
@@ -136,7 +136,7 @@ describe('Test Termii Provider', () => {
 				);
 
 			await termiiProvider.sendSms({
-				template: TEMPLATE_TYPE.WELCOME_EMAIL,
+				template: TEMPLATE_TYPE.DISBURSAL_FAILURE,
 				channels: [NOTIFICATION_CHANNEL.SMS],
 				data: {
 					firstName: 'Okafor',
