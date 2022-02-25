@@ -14,9 +14,16 @@ dotenv.config();
 
 const templates: Record<Format, Record<string, (data: any) => string>> = {
 	[Format.SMS]: {
+		consistentLoan: SMS.consistentLoan,
+		earlyRepaymentReminder: SMS.earlyRepaymentReminder,
 		disbursalFailure: SMS.disbursalFailure,
+		guarantor: SMS.guarantor,
+		inviteCustomer: SMS.inviteCustomer,
+		reminder: SMS.reminder,
+		offer: SMS.offer,
+		otp: SMS.otp,
+		repaymentInvoice: SMS.repaymentInvoice,
 	},
-
 	[Format.HTML]: {
 		disbursalFailure: EMAIL.disbursalFailure,
 	},
