@@ -69,7 +69,7 @@ describe('Test Twillo Provider', () => {
 					firstName: 'Jude',
 				},
 				from: 'Payhippo',
-				template: TEMPLATE_TYPE.WELCOME_EMAIL,
+				template: TEMPLATE_TYPE.DISBURSAL_FAILURE,
 			};
 			await twilloProviderProto.sendWhatsapp(props);
 
