@@ -1,7 +1,7 @@
 import { Format } from '../interfaces/common.enums';
 import { IBaseMessage } from '../interfaces/common.interface';
 import { GetTemplateProps } from '../interfaces/common.types';
-import { SMS } from '../templates';
+import { SMS, EMAIL, SLACK } from '../templates';
 
 import dotenv from 'dotenv';
 import { Environment } from '@payhippo/node-service-base/dist/types';
@@ -23,6 +23,13 @@ const templates: Record<Format, Record<string, (data: any) => string>> = {
 		offer: SMS.offer,
 		otp: SMS.otp,
 		repaymentInvoice: SMS.repaymentInvoice,
+	},
+	[Format.HTML]: {
+		disbursalFailure: EMAIL.disbursalFailure,
+	},
+
+	[Format.SLACK]: {
+		serviceFailure: SLACK.serviceFailure,
 	},
 };
 
