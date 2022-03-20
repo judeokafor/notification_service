@@ -45,7 +45,6 @@ export default class TwilioProvider
 	public async sendWhatsapp(props: IWhatsappNotificationPayload): Promise<void> {
 		const { to, data, from, template } = props;
 
-		logger.log('sendWhatsapp props', props);
 		try {
 			const message = this.getTemplate({
 				template,

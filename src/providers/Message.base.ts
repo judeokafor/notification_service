@@ -44,7 +44,7 @@ export default abstract class Message implements IBaseMessage {
 
 	getTemplate(props: GetTemplateProps): string {
 		const { format, template, data } = props;
-
+		console.log('getTemplate props', props);
 		return templates[format][template](data);
 	}
 }
