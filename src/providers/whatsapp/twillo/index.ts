@@ -44,6 +44,7 @@ export default class TwilioProvider
 
 	public async sendWhatsapp(props: IWhatsappNotificationPayload): Promise<void> {
 		const { to, data, from, template } = props;
+
 		try {
 			const message = this.getTemplate({
 				template,
@@ -51,7 +52,7 @@ export default class TwilioProvider
 				format: Format.SMS,
 			});
 
-			logger.log('getting template message', message);
+			logger.log('template message', message);
 
 			const twilloResponse = await this.twiloClient.messages.create({
 				body: message,
