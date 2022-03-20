@@ -1,6 +1,6 @@
-# {ADD SERVICE NAME HERE} #
+# NOTIFICATION SERRVICE
 
-**{Add short overview description of service here}**
+**This service handles notifications such as email, sms, whatsapp, push , slack etc**
 
 ## Prerequiste Before Usage
 
@@ -21,51 +21,61 @@ Each one of these steps must be followed for the service to securely start.
 5. Create a `service-account.json` under the `/config` directory
 6. Copy and Paste the keys JSON in the `service-account.json` file
 7. From your terminal run the following command:
+
 ```
 export GOOGLE_APPLICATION_CREDENTIALS={path to service-account.json}
 ```
+
 8. Set up the NPM configuration file by running the following command:
+
 ```
 npm run artifactregistry-login .npmrc
 ```
+
 9. [Create secrets](https://cloud.google.com/secret-manager) for the service. **Make sure the secret name is the same as the service name**
 
-
 ## Usage
-* Installing dependencies
+
+-   Installing dependencies
+
 ```
 npm i
 ```
 
-* Running tests
-To run our unit tests you can run:
+-   Running tests
+    To run our unit tests you can run:
 
 ```
 npm run test
 ```
 
-* Running lint
-To lint the code run:
+-   Running lint
+    To lint the code run:
 
 ```
 npm run lint
 ```
 
-* Start Locally
+-   Start Locally
+
 ```
 npm run dev
 ```
 
-* Start Locally Using Make (Container)
+-   Start Locally Using Make (Container)
+
 ```
 make start
 ```
-* Start Locally with bash (Container)
+
+-   Start Locally with bash (Container)
+
 ```
 ./start.sh
 ```
 
 ## Example
+
 ```
 import NodeService from '@payhippo/node-service-template';
 import * as dotenv from 'dotenv';
@@ -90,16 +100,87 @@ try {
 }
 ```
 
-## Importpant Important
-- You will need to reauthenticate with `npm run artifactregistry-login .npmrc` whenever you want to pull the latest version of `@payhippo/node-service-base`.
+## Important
 
-- Ensure when your creating pub-sub topics to use the service name as topic name
- example: `risk-assessment-service`, `payment-service`.
+-   You will need to reauthenticate with `npm run artifactregistry-login .npmrc` whenever you want to pull the latest version of `@payhippo/node-service-base`.
 
-- Also ensure your data in the publisher has a type in its object:
+-   Ensure when your creating pub-sub topics to use the service name as topic name
+    example: `risk-assessment-service`, `payment-service`.
+
+-   Also ensure your data in the publisher has a type in its object:
+
 ```{
   messageId: '123',
   data: {
     type: 'UPDATE_BANK_STATEMENT',
   }
-}```
+}
+```
+
+### Payload Requests per type
+
+-   _EMAIL NOTIFICATION_
+
+```
+{
+    "type": "SEND_NOTIFICATION",
+    "data": {
+        "firstName": "Jude Okafor"
+    },
+    "channels": [ "EMAIL"],
+    "template": "welcome",
+    "title": "Welcome to payhippo braa",
+    "to": "okaforjudechukwuebuka@gmail.com",
+    "meta": {
+        accountManagerId?: "account manager's id";
+    	partnerEmail?: string;
+    	includeCC?: boolean; // defaults to false
+    	noReply?: boolean; // defaults to false
+    	attachmentType?: AttachmentType; // PAYMENT_AUDIT or METRICS_CSV,
+    }
+}
+```
+
+-   _SMS NOTIFICATION_
+
+```
+{
+    "type": "SEND_NOTIFICATION",
+    "data": {
+        "firstName": "Jude Okafor"
+    },
+    "channels": [ "SMS"],
+    "template": "disbursalFailure",
+    "to": "07065383765",
+    "meta": {
+    	useDnd?: boolean; // defaults to false
+    }
+}
+```
+
+-   _WHATSAPP NOTIFICATION_
+
+```
+{
+    "type": "SEND_NOTIFICATION",
+    "data": {
+        "firstName": "Jude Okafor"
+    },
+    "channels": [ "WHATSAPP"],
+    "template": "disbursalFailure",
+    "to": "07065383765",
+}
+```
+
+-   _SLACK NOTIFICATION_
+
+```
+{
+    "type": "SEND_NOTIFICATION",
+    "data": {
+        "firstName": "Jude Okafor"
+    },
+    "channels": [ "SLACK"],
+    "template": "disbursalFailure",
+}
+```
