@@ -44,6 +44,8 @@ abstract class PhoneNumberBasedMessage extends Message implements IPhoneNumberMe
 			if (phoneNumber.startsWith('234')) {
 				return `+${phoneNumber}`;
 			}
+
+			return phoneNumber;
 		}
 
 		logger.error('Invalid phone number passed', phoneNumber);
