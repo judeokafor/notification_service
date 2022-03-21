@@ -52,10 +52,6 @@ export default class TwilioProvider
 				format: Format.SMS,
 			});
 
-			logger.log('template message', message);
-
-			logger.log('whatsapp number:', this.getWhatsappNumber(this.formatPhoneNumber(to)));
-
 			const twilloResponse = await this.twiloClient.messages.create({
 				body: message,
 				from: from
