@@ -45,6 +45,11 @@ abstract class PhoneNumberBasedMessage extends Message implements IPhoneNumberMe
 				return `+${phoneNumber}`;
 			}
 
+			// add +234 to 10 digit phone number
+			if (phoneNumber.length === 10) {
+				return `+234${phoneNumber}`;
+			}
+
 			return phoneNumber;
 		}
 
