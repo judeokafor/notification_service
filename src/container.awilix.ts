@@ -14,8 +14,10 @@ const container = createContainer({
 
 container.register({
 	env: asValue(process.env),
+
 	notificationController: asClass(NotificationController),
 	notificationService: asClass(NotificationService),
+
 	emailProvider: asClass(MailgunProvider),
 	smsProvider: asClass(TermiiProvider),
 	whatsappProvider: asClass(TwilioProvider),

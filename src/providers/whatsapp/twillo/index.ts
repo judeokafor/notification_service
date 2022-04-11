@@ -42,6 +42,20 @@ export default class TwilioProvider
 		return '';
 	}
 
+	private getWhatsappRecepients(phoneNumbers: string[]) {
+		return phoneNumbers.map(number => this.getWhatsappNumber(this.formatPhoneNumber(number)));
+	}
+
+	private getRecepients(to: string) {
+		let recepients = [] as string[];
+
+		if (to) {
+			recepients = to.split(',');
+		}
+
+		return recepients;
+	}
+
 	public async sendWhatsapp(props: IWhatsappNotificationPayload): Promise<void> {
 		const { to, data, from, template } = props;
 
@@ -54,15 +68,21 @@ export default class TwilioProvider
 
 			logger.log('whatsapp number', this.getWhatsappNumber(this.formatPhoneNumber(to)));
 
-			const twilloResponse = await this.twiloClient.messages.create({
-				body: message,
-				from: from
-					? this.getWhatsappNumber(this.formatPhoneNumber(from))
-					: this.getWhatsappNumber(this.payhippoWhatsappNumber),
-				to: this.getWhatsappNumber(this.formatPhoneNumber(to)),
-			});
+			const recepients = this.getRecepients(to);
+			const whatsappRecepients = this.getWhatsappRecepients(recepients);
 
-			logger.log(`sending whatsapp to ${to}`, twilloResponse.status);
+			for (let index = 0; index < whatsappRecepients.length; index++) {
+				const recepient = whatsappRecepients[index];
+
+				this.twiloClient.messages.create({
+					body: message,
+					from: from
+						? this.getWhatsappNumber(this.formatPhoneNumber(from))
+						: this.getWhatsappNumber(this.payhippoWhatsappNumber),
+					to: recepient,
+				});
+				logger.log(`sending whatsapp to ${to}`);
+			}
 		} catch (error) {
 			logger.error(error);
 		}

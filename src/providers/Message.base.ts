@@ -23,6 +23,7 @@ const templates: Record<Format, Record<string, (data: any) => string>> = {
 		offer: SMS.offer,
 		otp: SMS.otp,
 		repaymentInvoice: SMS.repaymentInvoice,
+		minimumBalance: SMS.minimumBalance,
 	},
 	[Format.HTML]: {
 		disbursalFailure: EMAIL.disbursalFailure,
@@ -34,7 +35,7 @@ const templates: Record<Format, Record<string, (data: any) => string>> = {
 };
 
 export default abstract class Message implements IBaseMessage {
-	isProductionEnvironment(): boolean {
+	public isProductionEnvironment(): boolean {
 		const environment = (
 			process.env._APP_ENV || Environment.DEVELOPMENT
 		).toUpperCase() as Environment;
@@ -42,7 +43,7 @@ export default abstract class Message implements IBaseMessage {
 		return [Environment.PRODUCTION].includes(environment);
 	}
 
-	getTemplate(props: GetTemplateProps): string {
+	public getTemplate(props: GetTemplateProps): string {
 		const { format, template, data } = props;
 		console.log('getTemplate props', props);
 		return templates[format][template](data);

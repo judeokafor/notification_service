@@ -8,3 +8,4 @@ export { default as offer } from './offer';
 export { default as otp } from './otp';
 export { default as referenceAssociation } from './referenceAssociation';
 export { default as repaymentInvoice } from './repaymentInvoice';
+export { default as minimumBalance } from './minimumBalance';
