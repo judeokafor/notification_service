@@ -8,6 +8,7 @@ import ISmsProvider, {
 } from '../../../interfaces/sms/ISmsProvider.interface';
 import IWhatsappProvider, {
 	IWhatsappNotificationPayload,
+	RetryMessageWithSmsPayload,
 } from '../../../interfaces/whatsapp/IWhatsappProvider.interface';
 
 import PhoneNumberBasedMessage from '../../phoneNumberMessage.base';
@@ -86,14 +87,14 @@ export default class TwilioProvider
 		}
 	}
 
-	public async retryMessageWithSms(props: any): Promise<void> {
+	public async retryMessageWithSms(props: RetryMessageWithSmsPayload): Promise<void> {
 		const { to, message } = props;
 
 		try {
 			await this.twiloClient.messages.create({
 				to: this.formatPhoneNumber(to),
 				body: message,
-				from: 'Payhippo',
+				from: this.payhippoWhatsappNumber,
 			});
 		} catch (error) {
 			logger.error(error);
@@ -115,8 +116,7 @@ export default class TwilioProvider
 				await this.twiloClient.messages.create({
 					to: this.formatPhoneNumber(to),
 					body: message,
-					from: 'Payhippo',
-					statusCallback: 'https://212f-35-241-179-63.eu.ngrok.io/webhooks/twillo',
+					from: this.payhippoWhatsappNumber,
 				});
 
 				return;
