@@ -8,3 +8,7 @@ export type TwilioProviderConstructor = {
 		_PAYHIPPO_WHATSAPP_NUMBER: string;
 	};
 };
+
+export enum TwilloResponseCode {
+	'UNAVAIALBLE' = 63003,
+}

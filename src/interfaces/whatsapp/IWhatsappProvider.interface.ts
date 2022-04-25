@@ -7,6 +7,12 @@ export interface IWhatsappNotificationPayload
 	from?: string;
 }
 
+export type RetryMessageWithSmsPayload = {
+	message: string;
+	to: string;
+};
+
 export default interface IWhatsappProvider {
 	sendWhatsapp(props: IWhatsappNotificationPayload): Promise<void>;
+	retryMessageWithSms(props: RetryMessageWithSmsPayload): Promise<void>;
 }

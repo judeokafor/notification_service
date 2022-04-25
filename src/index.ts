@@ -1,7 +1,7 @@
 import NodeService, { logger } from '@payhippo/node-service-base';
 import * as dotenv from 'dotenv';
 
-import { api, message } from './routers';
+import { api, message, webhooks } from './routers';
 
 import * as pack from '../package.json';
 
@@ -16,7 +16,7 @@ try {
 		},
 		middlewares: [],
 		name: pack.name,
-		routers: { api, message },
+		routers: { api, message, webhooks },
 		version: pack.version,
 	});
 

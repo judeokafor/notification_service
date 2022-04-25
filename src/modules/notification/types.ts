@@ -8,6 +8,7 @@ import ISlackProvider, {
 import ISmsProvider, { ISmsNotificationPayload } from '../../interfaces/sms/ISmsProvider.interface';
 import IWhatsappProvider, {
 	IWhatsappNotificationPayload,
+	RetryMessageWithSmsPayload,
 } from '../../interfaces/whatsapp/IWhatsappProvider.interface';
 
 export type NotificationServiceConstructor = {
@@ -31,3 +32,5 @@ export type GetNotificationChannelProps = {
 export type GetNotificationChannel = (
 	props: GetNotificationChannelProps
 ) => Promise<void> | undefined;
+
+export type RetryMessageWithSms = (props: RetryMessageWithSmsPayload) => Promise<void>;

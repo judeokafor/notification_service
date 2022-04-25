@@ -9,9 +9,14 @@ import ISlackProvider, {
 import ISmsProvider, { ISmsNotificationPayload } from '../../interfaces/sms/ISmsProvider.interface';
 import IWhatsappProvider, {
 	IWhatsappNotificationPayload,
+	RetryMessageWithSmsPayload,
 } from '../../interfaces/whatsapp/IWhatsappProvider.interface';
 
-import { GetNotificationChannel, NotificationServiceConstructor } from './types';
+import {
+	GetNotificationChannel,
+	NotificationServiceConstructor,
+	RetryMessageWithSms,
+} from './types';
 
 export default class NotificationService {
 	private emailProvider: IEmailProvider;
@@ -46,5 +51,11 @@ export default class NotificationService {
 			default:
 				break;
 		}
+	};
+
+	retryNotificationWithSms: RetryMessageWithSms = async (props: RetryMessageWithSmsPayload) => {
+		const { to, message } = props;
+
+		await this.whatsappProvider.retryMessageWithSms({ to, message });
 	};
 }

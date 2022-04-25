@@ -66,8 +66,6 @@ export default class TwilioProvider
 				format: Format.SMS,
 			});
 
-			logger.log('whatsapp number', this.getWhatsappNumber(this.formatPhoneNumber(to)));
-
 			const recepients = this.getRecepients(to);
 			const whatsappRecepients = this.getWhatsappRecepients(recepients);
 
@@ -83,6 +81,20 @@ export default class TwilioProvider
 				});
 				logger.log(`sending whatsapp to ${to}`);
 			}
+		} catch (error) {
+			logger.error(error);
+		}
+	}
+
+	public async retryMessageWithSms(props: any): Promise<void> {
+		const { to, message } = props;
+
+		try {
+			await this.twiloClient.messages.create({
+				to: this.formatPhoneNumber(to),
+				body: message,
+				from: 'Payhippo',
+			});
 		} catch (error) {
 			logger.error(error);
 		}
@@ -104,6 +116,7 @@ export default class TwilioProvider
 					to: this.formatPhoneNumber(to),
 					body: message,
 					from: 'Payhippo',
+					statusCallback: 'https://212f-35-241-179-63.eu.ngrok.io/webhooks/twillo',
 				});
 
 				return;
